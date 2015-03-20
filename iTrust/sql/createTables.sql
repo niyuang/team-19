@@ -687,7 +687,7 @@ CREATE TABLE patientfooddiary(
 	carbs		DOUBLE NOT NULL default '0', 
 	fiber		DOUBLE NOT NULL default '0',  
 	sugar		DOUBLE NOT NULL default '0', 
-	protein		DOUBLE NOT NULL default '0',
+	protein		DOUBLE NOT NULL default '0'
 ) ENGINE=MyISAM;
 
 /* added 3/20/15 */
