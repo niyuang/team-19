@@ -377,6 +377,15 @@ public class DAOFactory {
 	}
 	
 	/**
+	 * Added 3/20/15
+	 * Gets the DAO for body measurement records.
+	 * @return this DAO factory's body measurement
+	 */
+	public BodyMeasurementDAO getBodyMeasurementDAO() {
+		return new BodyMeasurementDAO(this);
+	}
+	
+	/**
 	 * Gets the DAO for setting flags. Currently used with obstetrics.
 	 * @return this DAO factory's ObstetricsRecordDAO
 	 */
