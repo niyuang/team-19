@@ -385,7 +385,19 @@
 	<servlet-mapping>
 		<servlet-name>FindExpertServlet</servlet-name>
 		<url-pattern>/auth/patient/FindExpertServlet</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>BodyChartServlet</display-name>
+		<servlet-name>BodyChartServlet</servlet-name>
+		<servlet-class>edu.ncsu.csc.itrust.server.BodyChartServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BodyChartServlet</servlet-name>
+		<url-pattern>/auth/patient/BodyChartServlet</url-pattern>
+	</servlet-mapping>
 	
 </web-app>
 
