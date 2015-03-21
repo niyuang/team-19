@@ -85,13 +85,31 @@ public class BodyMeasurementDAO {
 	 * correlating to the given MID
 	 * @throws DBException
 	 */
-	public List<BodyMeasurementBean> getBodyMeasurementByMID(long mid)
-			throws DBException {
+	public List<BodyMeasurementBean> getBodyMeasurementByMID(long mid) throws DBException {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
 			ps = conn.prepareStatement("SELECT * FROM patientBodyMeasurements WHERE MID=? ORDER BY ldate DESC");
+			ps.setLong(1, mid);
+			ResultSet rs = ps.executeQuery();
+			List<BodyMeasurementBean> list = bodyLoader.loadList(rs);
+			rs.close();
+			ps.close();
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+	
+	public List<BodyMeasurementBean> getBodyMeasurementByMIDAscending(long mid) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT * FROM patientBodyMeasurements WHERE MID=? ORDER BY ldate ASC");
 			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			List<BodyMeasurementBean> list = bodyLoader.loadList(rs);

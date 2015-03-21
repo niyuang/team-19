@@ -35,10 +35,10 @@ pageTitle = "iTrust - View Body Measurements";
 	
 	    <tr class="subHeader">
 	        <td style="text-align: center">Log Date</td>
-	        <td style="text-align: center">Weight (lbs.)<br>(<a href="/iTrust/auth/patient/bodyMeasurementChart.jsp">View Chart</a>)</td>
-	        <td style="text-align: center">Height (in.)</td>
-	        <td style="text-align: center">Waist (in.)</td>
-	        <td style="text-align: center">Arms<br>Wing Span (in.)</td>
+	        <td style="text-align: center">Weight (lbs.)<br>(<a href="/iTrust/auth/patient/bodyMeasurementChart.jsp?dataType=Weight">View Chart</a>)</td>
+	        <td style="text-align: center">Height (in.)<br>(<a href="/iTrust/auth/patient/bodyMeasurementChart.jsp?dataType=Height">View Chart</a>)</td>
+	        <td style="text-align: center">Waist (in.)<br>(<a href="/iTrust/auth/patient/bodyMeasurementChart.jsp?dataType=Waist">View Chart</a>)</td>
+	        <td style="text-align: center">Arms<br>Wing Span (in.)<br>(<a href="/iTrust/auth/patient/bodyMeasurementChart.jsp?dataType=Arms">View Chart</a>)</td>
 	    </tr>
 	    
 	<%

@@ -17,14 +17,27 @@ pageTitle = "iTrust - View Body Measurements";
 
 <%@include file="/header.jsp" %>
 
-</head>
-<body>
-<h1>JFreechart: Create Pie Chart Dynamically</h1>
-<form id="form1">
-  <img src="BodyChartServlet?key=didthismessagetpassedcorrectly" width="600" height="400" border="0"/>
-  <input type="button" onclick="refreshpage()" value="Refresh"/>
+<%
+String pmid = Long.toString(loggedInMID);
+
+String recType = (String)request.getParameter("dataType");
+
+if (!recType.equals("Weight") && !recType.equals("Height") && !recType.equals("Waist") && !recType.equals("Arms")) {
+	response.sendRedirect("/iTrust/auth/patient/home.jsp");
+	return;
+}
+
+String graphSource = "BodyChartServlet?mid=" + pmid + "&type=" + recType;
+//System.out.println(graphSource);
+%>
+
+<div align=center>
+<h2>Patient Body Measurement Chart: <%=recType%></h2>
+<img src="<%=graphSource%>" width="800" height="600" border="0"/>
+</div>
+
+<form action="viewBodyMeasurement.jsp">
+ <input type="submit" value="Back"/>  
 </form>
-</body>
-</html>
 
 <%@include file="/footer.jsp"%>

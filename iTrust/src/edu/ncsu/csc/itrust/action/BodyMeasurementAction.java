@@ -1,6 +1,8 @@
 package edu.ncsu.csc.itrust.action;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.beans.BodyMeasurementBean;
@@ -56,11 +58,74 @@ public class BodyMeasurementAction {
 	 * @throws FormValidationException
 	 */
 	public boolean addBodyMeasurement(BodyMeasurementBean bm) throws DBException, FormValidationException {
+		
+		/**
+		 * Handles Date incorrect format
+		 */
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Date testDate = null;
+        try {
+            testDate = sdf.parse(bm.getLogDate());
+        }
+        catch (ParseException e) {
+        	throw new FormValidationException("Enter Log Date in MM/DD/YYYY");
+        }
+        if (!sdf.format(testDate).equals(bm.getLogDate())) {
+        	throw new FormValidationException("Enter Log Date in MM/DD/YYYY");
+        }
+        
+        /**
+         * Handles Date Wrong Time
+         */
+        Date now = new Date();
+        int compare = testDate.compareTo(now);
+        if(compare > 0){
+        	throw new FormValidationException("Consumption Date: Restricted to Current or Past Dates");
+        }
+        
+        /**
+         * Handles Weight
+         */
+        if(bm.getWeight() <= 0){
+        	throw new FormValidationException("Weight: Must be Greater than 0");
+        }
+        
+        /**
+         * Handles Height
+         */
+        if(bm.getHeight() <= 0){
+        	throw new FormValidationException("Height: Must be Greater than 0");
+        }
+        
+        /**
+         * Handles Waist
+         */
+        if(bm.getWaist() <= 0){
+        	throw new FormValidationException("Waist: Must be Greater than 0");
+        }
+        
+        /**
+         * Handles Arms
+         */
+        if(bm.getArms() <= 0){
+        	throw new FormValidationException("Arms/Wing Span: Must be Greater than 0");
+        }
+		
+		
 		try {
 			return bodyMeasurementDAO.addBodyMeasurement(bm);
 		} catch (ParseException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Removes the needs for passing a prodDAO to create the action object
+	 * @return
+	 * @throws DBException
+	 */
+	public List<BodyMeasurementBean> getBodyMeasurementWithMIDASC() throws DBException {
+		return bodyMeasurementDAO.getBodyMeasurementByMIDAscending(patient);
 	}
 
 }
