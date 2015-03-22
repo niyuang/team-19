@@ -80,7 +80,7 @@ public class BodyMeasurementAction {
         Date now = new Date();
         int compare = testDate.compareTo(now);
         if(compare > 0){
-        	throw new FormValidationException("Consumption Date: Restricted to Current or Past Dates");
+        	throw new FormValidationException("Log Date: Restricted to Current or Past Dates");
         }
         
         /**

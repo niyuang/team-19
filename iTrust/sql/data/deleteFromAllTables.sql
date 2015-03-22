@@ -74,3 +74,5 @@ ALTER TABLE recordsrelease AUTO_INCREMENT = 0;
 
 
 DELETE FROM patientfooddiary;
+DELETE FROM patientBodyMeasurements;
+DELETE FROM dietSuggestion;
