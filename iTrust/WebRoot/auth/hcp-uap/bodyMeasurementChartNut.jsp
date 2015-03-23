@@ -28,13 +28,25 @@ if (!recType.equals("Weight") && !recType.equals("Height") && !recType.equals("W
 	return;
 }
 
+BodyMeasurementAction action = new BodyMeasurementAction(prodDAO, Long.parseLong(pmid));
+List<BodyMeasurementBean> bmlist = action.getBodyMeasurement();
+
 String graphSource = "BodyChartServlet?mid=" + pmid + "&type=" + recType;
+
 %>
 
+<%if(bmlist.size() > 0){
+%>
 <div align=center>
 <h2>Patient Body Measurement Chart: <%=recType%></h2>
 <img src="<%=graphSource%>" width="800" height="600" border="0"/>
 </div>
+<%}else{%>
+<div align=center>
+<h2>Patient Body Measurement Chart: <%=recType%></h2>
+No Past Body Measurements Found
+</div>
+<%}%>
 
 <form action="viewBodyMeasurementNut.jsp">
  <input type="submit" value="Back"/>  

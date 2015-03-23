@@ -1,7 +1,10 @@
 package edu.ncsu.csc.itrust.server;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Day;
@@ -115,10 +120,20 @@ public class BodyChartServlet extends HttpServlet {
                     false, 
                     false);
             
+
+            
             XYPlot plot = (XYPlot) timechart.getPlot();
             XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer();
             r.setSeriesShape(0, ShapeUtilities.createDiamond(5));
             r.setSeriesShapesVisible(0, true);
+            
+            Color c = new Color(249, 249, 249);
+            plot.setBackgroundPaint(c);
+            
+            plot.setDomainGridlinePaint(Color.BLACK);
+            plot.setRangeGridlinePaint(Color.BLACK);
+            
+            plot.getDomainAxis().setVerticalTickLabels(true);
 
             response.setContentType("image/png"); /* Set the HTTP Response Type */
             ChartUtilities.writeChartAsPNG(out, timechart, 800, 600); /* Write the data to the output stream */
