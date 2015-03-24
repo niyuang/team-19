@@ -17069,4 +17069,47 @@
          "[Servings, Calories, Fat, Sodium, Carbs, Fiber, Sugar, and Protein - Must not be Blank!]" is displayed</eResult>
     </expectedResults>
 </test>
+<test id="testViewEmptyWeightGoalsChart">
+    <role>HCP</role>
+    <usecase>74</usecase>
+    <dateAdded>03/23/2015</dateAdded>
+    <description>
+        <precondition>Random Person and Spencer Reid are registered and authenticated with the iTrust system.</precondition>
+		<step>HCP Spencer Reid logs into iTrust.</step>
+		<step>Spencer Reid clicks on View Body Measurements under Patient info.</step>
+		<step>Search for Random Person and click on the MID.</step>
+		<step>Click on View Chart under Weight.</step>
+	</description>
+    <expectedResults>
+        <eResult>A message is displayed: “No Past Body Measurements Found”.</eResult>
+    </expectedResults>
+</test>
+<test id="testViewWeightGoalsCharts">
+    <role>HCP</role>
+    <usecase>74</usecase>
+    <dateAdded>03/23/2015</dateAdded>
+    <description>
+        <precondition>Jennifer Jareau and Spencer Reid are registered and authenticated with the iTrust system.</precondition>
+		<step>HCP Spencer Reid logs into iTrust.</step>
+		<step>Spencer Reid clicks on View Body Measurements under Patient info.</step>
+		<step>Search for Jennifer Jareau and click on the MID.</step>
+		<step>Click on View Chart under Weight.	</step>
+	</description>
+    <expectedResults>
+        <eResult>A graph showing the patient’s weight history is displayed.</eResult>
+    </expectedResults>
+</test>
+<test id="testViewWeightGoalsChartsAsNonNutritionist">
+    <role>HCP</role>
+    <usecase>74</usecase>
+    <dateAdded>03/23/2015</dateAdded>
+    <description>
+        <precondition>Jennifer Jareau and Kelly Doctor are registered and authenticated with the iTrust system.</precondition>
+		<step>HCP Kelly Doctor logs into iTrust.</step>
+		<step>Kelly Doctor clicks on View Body Measurements under Patient info.</step>
+	</description>
+    <expectedResults>
+        <eResult>The non-nutritionist HCP is redirected to his/her homepage.</eResult>
+    </expectedResults>
+</test>
 </BlackBoxTestPlan>
