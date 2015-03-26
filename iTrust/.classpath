@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="unittests"/>
 	<classpathentry kind="src" path="httptests"/>
+	<classpathentry kind="src" path="seleniumtests"/>
 	<classpathentry kind="lib" path="testing-libs/cglib-nodep-2.2.jar"/>
 	<classpathentry kind="lib" path="testing-libs/easymock.jar"/>
 	<classpathentry kind="lib" path="testing-libs/easymockclassextension.jar"/>
@@ -25,5 +26,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="lib" path="testing-libs/selenium-java-2.45.0.jar"/>
+	<classpathentry kind="lib" path="testing-libs/selenium-java-2.45.0-srcs.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
