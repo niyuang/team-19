@@ -1,15 +1,12 @@
 package edu.ncsu.csc.itrust.selenium;
 
-import java.io.File;
+
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import com.meterware.httpunit.WebConversation;
-import com.meterware.httpunit.WebForm;
-import com.meterware.httpunit.WebResponse;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
 
