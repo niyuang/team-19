@@ -694,7 +694,8 @@ CREATE TABLE patientfooddiary(
 CREATE TABLE dietSuggestion(
 	MID			BIGINT unsigned,
 	ldate		DATE NOT NULL,
-	suggestion 	VARCHAR(200) DEFAULT ''
+	suggestion 	VARCHAR(200) DEFAULT '',
+	PRIMARY KEY (ldate, MID)
 ) ENGINE=MyISAM; 
 
 /* added 3/20/15 */

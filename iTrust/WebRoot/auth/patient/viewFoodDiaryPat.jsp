@@ -1,5 +1,9 @@
 <%@page import="edu.ncsu.csc.itrust.action.FoodDiaryAction"%> <% //  Fooddiaryaction %> 
 <%@page import="edu.ncsu.csc.itrust.beans.FoodDiaryBean"%> <% //  Changed to EntryBean %> 
+
+<%@page import="edu.ncsu.csc.itrust.action.DietSuggestionAction"%>  
+<%@page import="edu.ncsu.csc.itrust.beans.DietSuggestionBean"%> 
+
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -8,6 +12,7 @@
 
 
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
+<%@page import="edu.ncsu.csc.itrust.exception.DBException"%>
 
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld" %>
 
@@ -25,6 +30,10 @@
 
 FoodDiaryAction action = new FoodDiaryAction(prodDAO, loggedInMID);
 List<FoodDiaryBean> eatlist = action.getFoodDiary();
+
+DietSuggestionAction suggestionAction = new DietSuggestionAction(prodDAO, loggedInMID);
+List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion();
+
 SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 loggingAction.logEvent(TransactionType.VIEW_FOOD_DIARY, loggedInMID.longValue(), loggedInMID.longValue() , "Patient views their food diary");
@@ -140,6 +149,7 @@ for (FoodDiaryBean fdbean: eatlist) {
         <td style="text-align: center">Grams Sugars</td>
         <td style="text-align: center">Grams Fiber</td>
         <td style="text-align: center">Grams Protein</td>
+        <td style="text-align: center">Nutritionist's Comments</td>
     </tr>
 
 <%
@@ -155,6 +165,15 @@ List<String> dateCheck = new ArrayList<String>();
 for(FoodDiaryBean superDate: eatlist) {
 	
 	String entDate = superDate.getEntryDate();
+	
+	DietSuggestionBean dsbn = null;
+	
+	try{
+		dsbn = suggestionAction.getSuggestionBean(entDate);
+	} catch(DBException e) {
+		dsbn = new DietSuggestionBean();
+	}
+	
 	//Check for duplicates
 	if( dateCheck.size() == 0 || !(dateCheck.contains(entDate)) ){
 		dateCheck.add(entDate);
@@ -201,6 +220,32 @@ for(FoodDiaryBean superDate: eatlist) {
     </td>            <td style="text-align: center; min-width: 8em">
             <%= StringEscapeUtils.escapeHtml(Double.toString(dProt)) %>
     </td>               
+
+    <%
+    	if(suggestionList.size() == 0) {
+    		%> 
+    		<td style="text-align: center; min-width: 8em">
+            <%= StringEscapeUtils.escapeHtml("") %> </td>
+    		
+    		<%} 
+    	else if(dsbn == null){
+   			%> 
+   		    <td style="text-align: center; min-width: 8em">
+            <%= StringEscapeUtils.escapeHtml("") %> </td>
+   			
+	<% 
+    	}
+    	else {
+    		%> 
+			<td style="text-align: center; min-width: 8em; color:green">
+            <%= StringEscapeUtils.escapeHtml(dsbn.getSuggestion()) %> </td>		
+			
+			<%
+    		
+    	}
+	
+	%>
+            
 	</tr>
 	
 <%

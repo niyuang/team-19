@@ -13,7 +13,11 @@
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 
 <%@page import="edu.ncsu.csc.itrust.action.FoodDiaryAction"%> <% //  Fooddiaryaction %> 
-<%@page import="edu.ncsu.csc.itrust.beans.FoodDiaryBean"%> <% //  Changed to EntryBean %> 
+<%@page import="edu.ncsu.csc.itrust.beans.FoodDiaryBean"%> <% //  Changed to EntryBean %>
+
+<%@page import="edu.ncsu.csc.itrust.action.DietSuggestionAction"%>  
+<%@page import="edu.ncsu.csc.itrust.beans.DietSuggestionBean"%> 
+
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
@@ -24,6 +28,8 @@
 <%@page import="edu.ncsu.csc.itrust.beans.HealthRecord"%>
 
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException"%>
+<%@page import="edu.ncsu.csc.itrust.exception.DBException"%>
+
 
 <%@include file="/global.jsp" %>
 
@@ -53,16 +59,75 @@ String charlie = beta.getSpecialty();
 	}
 
 
-
-
-
 long pidLong = Long.parseLong(pidString);
 
 FoodDiaryAction action = new FoodDiaryAction(prodDAO, pidLong);
 List<FoodDiaryBean> eatlist = action.getFoodDiary();
+
+DietSuggestionAction suggestionAction = new DietSuggestionAction(prodDAO, pidLong);
+List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion(); 
+
+
+String successString = (String)session.getAttribute("success");
+if (successString != null) {
+	out.println("<div align=center> <span style=\"color:green\"  class=\"font_success\">" + (String)session.getAttribute("success") + "<br></span></div>");
+	session.setAttribute("success", null);
+}
+
+
+String suggestion = request.getParameter("suggestion");
+// System.out.println("Suggestion: " + suggestion);
+
+String sub = request.getParameter("sub");	
+// System.out.println("SUB: " + sub);
+if(sub == null) {
+	sub = "no";
+}
+
+
+String entryDate = request.getParameter("entry");
+if(entryDate == null) {
+	entryDate = "";
+}
+
+if(sub.equals("yes")){
+	try {
+		DietSuggestionBean dsBean = new DietSuggestionBean();	
+		
+		
+		dsBean.setPatientID(pidLong);
+
+		dsBean.setEntryDate(entryDate);
+		dsBean.setSuggestion(suggestion);
+		
+		suggestionAction.addSuggestion(dsBean);
+		
+		session.setAttribute("err1", "[Food Diary Entry Successfully Changed!]");
+		
+		
+		session.setAttribute("success", "Suggestion Successfully Added");
+		response.sendRedirect("/iTrust/auth/hcp-uap/viewFoodDiaryNut.jsp");
+		
+		%>
+		Suggestion Successfully Added.
+		<%
+		
+		return;
+
+	} catch (FormValidationException e) { //Need to create a new error to be handled
+		session.setAttribute("err1", e.getMessage());
+		response.sendRedirect("/iTrust/auth/hcp-uap/viewFoodDiaryNut.jsp");
+		//out.println("<span class=\"font_failure\">" + e.getMessage() + "<br>");	
+	}
+	
+	
+}
+
 SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 loggingAction.logEvent(TransactionType.VIEW_FOOD_DIARY, loggedInMID.longValue(), pidLong , "Nutritionist views patient food diary");
+
+
 
 
 
@@ -129,11 +194,12 @@ for (FoodDiaryBean fdbean: eatlist) {
 
 	<table class="fTable" align="center" id="foodDiaryTotals">
     <tr>
-        <th colspan="11">Patient Daily Totals</th>
+        <th colspan="11">Patient Daily Totals <input type="hidden" name="formIsFilled" value="true">
+        </th>
     </tr>
 
     <tr class="subHeader">
-        <td style="text-align: center"><br>Date</td>
+        <td style="text-align: center">Date</td>
         <td style="text-align: center">Calories</td>
         <td style="text-align: center">Grams Fat</td>
         <td style="text-align: center">mg Sodium</td>
@@ -141,6 +207,8 @@ for (FoodDiaryBean fdbean: eatlist) {
         <td style="text-align: center">Grams Sugars</td>
         <td style="text-align: center">Grams Fiber</td>
         <td style="text-align: center">Grams Protein</td>
+        <td style="text-align: center">Nutritionist's Comments</td>
+        <td style="text-align: center"></td>
     </tr>
 
 <%
@@ -152,10 +220,21 @@ double dCarbs = 0;
 double dSugar = 0;
 double dFiber = 0;
 double dProt = 0;
+
 List<String> dateCheck = new ArrayList<String>();
+
 for(FoodDiaryBean superDate: eatlist) {
 	
 	String entDate = superDate.getEntryDate();
+
+	DietSuggestionBean dsbn = null;
+	
+	try{
+		dsbn = suggestionAction.getSuggestionBean(entDate);
+	} catch(DBException e) {
+		dsbn = new DietSuggestionBean();
+	}
+	 
 	//Check for duplicates
 	if( dateCheck.size() == 0 || !(dateCheck.contains(entDate)) ){
 		dateCheck.add(entDate);
@@ -182,8 +261,11 @@ for(FoodDiaryBean superDate: eatlist) {
 			dProt += (double)foodbean.getProtein() * serve;
 		}
 	}
-%>	
+	
 
+
+%>	
+    <form action="viewFoodDiaryNut.jsp" method="post">
 	<tr>
 					<td style="text-align: center; min-width: 8em">
 	        <%= StringEscapeUtils.escapeHtml(entDate) %>				
@@ -201,9 +283,56 @@ for(FoodDiaryBean superDate: eatlist) {
             <%= StringEscapeUtils.escapeHtml(Double.toString(dFiber)) %>
     </td>            <td style="text-align: center; min-width: 8em">
             <%= StringEscapeUtils.escapeHtml(Double.toString(dProt)) %>
-    </td>               
-	</tr>
+    </td>       
+    	
+
+    <%
+  //  for(DietSuggestionBean dsb: suggestionList) {
+    	if(suggestionList.size() == 0) {
+    		%> 
+    	    <td> <input name="suggestion"
+    				value="<%=StringEscapeUtils.escapeHtml("")%>"
+    				type="text">
+    		</td>
+    		<input type="hidden" value=<%=superDate.getEntryDate() %> name="entry">
+    		<input type="hidden" value=<%="yes"%> name="sub">
+    		
+    		<%} 
+    	else if(dsbn == null){
+    			%> 
+    		    <td> <input name="suggestion"
+    					value="<%=StringEscapeUtils.escapeHtml("")%>"
+    					type="text">
+    			</td>
+    			<input type="hidden" value=<%=superDate.getEntryDate() %> name="entry">
+    			<input type="hidden" value=<%="yes"%> name="sub">
+    			
+    			<% 
+    	}
+    	else {
+    		%> 
+		    <td> <input name="suggestion"
+					value="<%=StringEscapeUtils.escapeHtml(dsbn.getSuggestion())%>"
+					type="text">
+			</td>
+			<input type="hidden" value=<%=superDate.getEntryDate() %> name="entry">
+			<input type="hidden" value=<%="yes"%> name="sub">
+			
+			<%
+    		
+    	}
+   // }
 	
+	%>
+	
+	<td> <input type="submit" 
+				value="Save">
+	</td>
+	</form>
+	
+				
+	</tr>
+	</form>
 <%
 	
 	//reset counter

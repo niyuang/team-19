@@ -377,6 +377,14 @@ public class DAOFactory {
 	}
 	
 	/**
+	 * Gets the DAO for nutritionist suggestions.
+	 * @return this DAO factory's food diary
+	 */
+	public DietSuggestionDAO getDietSuggestionDAO() {
+		return new DietSuggestionDAO(this);
+	}
+	
+	/**
 	 * Added 3/20/15
 	 * Gets the DAO for body measurement records.
 	 * @return this DAO factory's body measurement
