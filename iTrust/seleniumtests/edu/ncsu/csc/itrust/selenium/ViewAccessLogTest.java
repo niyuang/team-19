@@ -2,19 +2,11 @@ package edu.ncsu.csc.itrust.selenium;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.Select;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
-
-import org.openqa.selenium.By;
-
-import com.meterware.httpunit.WebConversation;
-import com.meterware.httpunit.WebForm;
-import com.meterware.httpunit.WebResponse;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,7 +26,13 @@ public class ViewAccessLogTest extends iTrustSeleniumTest {
 		gen.er4();
 	}
 	
-    // private PageUnderTest page;
+	/*
+	 * HCP 9000000000 has viewed PHR of patient 2.
+	 * Authenticate Patient
+	 * MID: 2
+	 * Password: pw
+	 * Choose option View Access Log
+	 */
 	public void testViewAccessLog1() throws Exception {
 
 		gen.transactionLog();
@@ -82,10 +80,17 @@ public class ViewAccessLogTest extends iTrustSeleniumTest {
 		assertTrue(tableRows.get(1).getText().contains(dateFormat.format(date)));
 		assertTrue(tableRows.get(1).getText().contains("Kelly Doctor"));
 		assertTrue(tableRows.get(1).getText().contains("View personal health information"));
-		
-		// it is possible to parse table into a two-dimensional array but I am afraid I am too lazy to do that.
+	
 	}
 	
+	/*
+	 * HCP 9000000000 has viewed PHR of patient 2 on 11/11/2007.
+	 * Authenticate Patient
+	 * MID: 2
+	 * Password: pw
+	 * Choose option View Access Log
+	 * Choose date range 6/22/2000 through 6/23/2000
+	 */
 	public void testViewAccessLog2() throws Exception {
 
 		gen.transactionLog();
@@ -114,6 +119,12 @@ public class ViewAccessLogTest extends iTrustSeleniumTest {
 		assertLogged(TransactionType.ACCESS_LOG_VIEW, 2L, 0L, "");
 	}
 	
+	/*
+	 * Authenticate Patient
+	 * MID: 1
+	 * Password: pw
+	 * Choose option View Access Log
+	 */
 	public void testViewAccessLog3() throws Exception {
 		gen.transactionLog();
 		
@@ -130,6 +141,15 @@ public class ViewAccessLogTest extends iTrustSeleniumTest {
 		assertLogged(TransactionType.ACCESS_LOG_VIEW, 1L, 0L, "");
 	}
 	
+	/*
+	 * HCP 9000000000 has viewed PHR of patient 2 on 11/11/2007.
+	 * Authenticate Patient
+	 * MID: 2
+	 * Password: pw
+	 * Choose option View Access Log
+	 * Choose date range 2000/5/5 through 2020/5/5
+	 * Invalid format in use yyyy/mm/dd
+	 */
 	public void testViewAccessLogYearFirstFormat() throws Exception {
 
 		gen.transactionLog();
@@ -169,6 +189,15 @@ public class ViewAccessLogTest extends iTrustSeleniumTest {
 		assertTrue( message.getText().contains("Information not valid"));
 	}
 	
+	/*
+	 * HCP 9000000000 has viewed PHR of patient 2 on 11/11/2007.
+	 * Authenticate Patient
+	 * MID: 2
+	 * Password: pw
+	 * Choose option View Access Log
+	 * Choose date range 11/12/2015 through 11/11/2015
+	 * Invalid format in use yyyy/mm/dd
+	 */
 	public void testViewAccessLogDateOrder() throws Exception {
 
 		gen.transactionLog();
@@ -231,5 +260,239 @@ public class ViewAccessLogTest extends iTrustSeleniumTest {
 		// Strange error: TypeError: Cannot find function addEventListener in object [object]
 		// http://grokbase.com/t/gg/selenium-users/126ng1snzx/typeerror-cannot-find-function-addeventlistener-in-object-exception-using-htmlunitdriver
 		// 7:31 PM Mar, 26 
+	}
+	
+	public void testViewAccessLogByRole() throws Exception {
+		gen.transactionLog3();
+		
+		HtmlUnitDriver driver = (HtmlUnitDriver)login("1", "pw");
+		assertEquals("iTrust - Patient Home", driver.getTitle());
+		assertLogged(TransactionType.HOME_VIEW, 1L, 0L, "");
+		
+		
+		// click on View Access Log
+		driver.findElement(By.linkText("Access Log")).click();
+		
+		WebElement startDate_box = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/table/tbody/tr[2]/td[2]/input[1]"));
+		
+		driver.setJavascriptEnabled(true);
+		driver.executeScript("arguments[0].setAttribute('value', '" + "02/01/2008" +"')", startDate_box);
+		
+		WebElement dueDate_box = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/table/tbody/tr[2]/td[4]/input[1]"));
+		driver.executeScript("arguments[0].setAttribute('value', '" + "09/22/2009" +"')", dueDate_box);
+		
+		WebElement submit_button = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/input"));
+		submit_button.click();
+		
+		// Tricky part. This box is hidden and written in scipt.
+		// Note: No need to get script out from the page. Directly run the function works.
+		//driver.executeScript("document.getElementsByName('sortBy')[0].setAttribute(\"dateOrRole\", 'role');");
+		
+		driver.findElement(By.linkText("Role")).click();
+		// Dang it took me one hour siting here stupidly trying to figure out how form and javascript should work
+		// Just click "Role" will sort roles.
+		
+		WebElement baseTable = driver.findElement(By.className("fTable"));
+		List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
+		
+		assertTrue(tableRows.get(1).getText().contains("Emergency Responder"));
+		assertTrue(tableRows.get(2).getText().contains("LHCP"));
+		assertTrue(tableRows.get(3).getText().contains("LHCP"));
+		assertTrue(tableRows.get(4).getText().contains("LHCP"));
+		assertTrue(tableRows.get(5).getText().contains("Personal Health Representative"));
+		assertTrue(tableRows.get(6).getText().contains("UAP"));
+        
+	}
+	
+	/**
+	 * Verifies that a representative is able to view the access log of a representee.
+	 * @throws Exception
+	 */
+	public void testViewAccessLogRepresentativeView() throws Exception {
+
+		gen.clearAllTables();
+		gen.standardData();
+		
+		HtmlUnitDriver driver = (HtmlUnitDriver)login("24", "pw");
+		assertEquals("iTrust - Patient Home", driver.getTitle());
+
+		// click on View Access Log
+		driver.findElement(By.linkText("Access Log")).click();
+		
+		// Create  a select class
+		Select viewLogFor = new Select
+				(driver.findElementByXPath("//*[@id=\"logMIDSelectMenu\"]"));
+		viewLogFor.selectByVisibleText("Dare Devil");
+		
+		WebElement submit_button = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/input"));
+		submit_button.click();
+		
+
+		WebElement baseTable = driver.findElement(By.className("fTable"));
+		assertFalse(baseTable.getText().contains("Beaker Beaker"));
+		assertTrue(baseTable.getText().contains("2007-06-23 06:55:59.0"));
+		System.out.print(baseTable.getText());
+		
+		// Refresh table
+		baseTable = driver.findElement(By.className("fTable"));
+		// Click on Role button
+		driver.findElement(By.linkText("Role")).click();
+		assertEquals("iTrust - View My Access Log", driver.getTitle());
+		assertFalse(baseTable.getText().contains("Beaker Beaker"));
+		assertTrue(baseTable.getText().contains("2007-06-23 06:55:59.0"));
+
+		driver.findElement(By.linkText("Access Log")).click();
+		assertEquals("iTrust - View My Access Log", driver.getTitle());
+		
+
+		driver.findElement(By.linkText("Access Log")).click();
+		baseTable = driver.findElement(By.className("fTable"));
+		
+		assertFalse(baseTable.getText().contains("Kelly Doctor"));
+		assertTrue(baseTable.getText().contains("2007-06-25 06:54:59.0"));
+	}
+	
+	/**
+	 * Verifies that a non-representative is not shown a representee to select.
+	 * @throws Exception
+	 */
+	public void testViewAccessLogNonRepresentativeView1() throws Exception {
+		gen.clearAllTables();
+		gen.standardData();
+
+		HtmlUnitDriver driver = (HtmlUnitDriver)login("24", "pw");
+		assertEquals("iTrust - Patient Home", driver.getTitle());
+
+		driver.findElement(By.linkText("Access Log")).click();
+		assertEquals("iTrust - View My Access Log", driver.getTitle());
+
+		WebElement baseTable = driver.findElement(By.className("fTable"));
+		assertFalse(baseTable.getText().contains("Devils Advocate"));
+	}
+	
+	/**
+	 * Verifies that DLHCP information is correctly hidden in the Access Log for a non-representative.
+	 * @throws Exception
+	 */
+	public void testViewAccessLogNonRepresentativeView2() throws Exception {
+		gen.clearAllTables();
+		gen.standardData();
+
+		HtmlUnitDriver driver = (HtmlUnitDriver)login("9000000007", "pw");
+		assertEquals("iTrust - HCP Home", driver.getTitle());
+
+		driver.findElement(By.linkText("Patient Information")).click();
+		assertEquals("iTrust - Please Select a Patient", driver.getTitle());
+		
+		// choose a patient
+        driver.findElement(By.name("UID_PATIENTID")).sendKeys("5");
+        driver.findElement(By.xpath("//input[@value='5']")).submit();
+		assertEquals("iTrust - Edit Patient", driver.getTitle());
+		
+		// click on log out
+		driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/ul/li[2]/a")).click();
+		assertEquals("iTrust - Login", driver.getTitle());
+		
+		// refreshed driver
+		driver = (HtmlUnitDriver)login("9000000000", "pw");
+		assertEquals("iTrust - HCP Home", driver.getTitle());
+		
+		driver.findElement(By.linkText("Patient Information")).click();
+		assertEquals("iTrust - Please Select a Patient", driver.getTitle());
+		
+        driver.findElement(By.name("UID_PATIENTID")).sendKeys("5");
+        driver.findElement(By.xpath("//input[@value='5']")).submit();
+		assertEquals("iTrust - Edit Patient", driver.getTitle());
+		
+		// click PHR information
+		driver.findElement(By.linkText("PHR Information")).click();
+		assertEquals("iTrust - Edit Personal Health Record", driver.getTitle());
+		
+		driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/ul/li[2]/a")).click();
+		assertEquals("iTrust - Login", driver.getTitle());
+		
+		// what's the point of test like this?
+		driver = (HtmlUnitDriver)login("9000000000", "pw");
+		assertEquals("iTrust - HCP Home", driver.getTitle());
+		
+		driver.findElement(By.linkText("Patient Information")).click();
+		assertEquals("iTrust - Please Select a Patient", driver.getTitle());
+		
+        driver.findElement(By.name("UID_PATIENTID")).sendKeys("5");
+        driver.findElement(By.xpath("//input[@value='5']")).submit();
+		assertEquals("iTrust - Edit Patient", driver.getTitle());
+		
+		driver.findElement(By.linkText("Basic Health Information")).click();
+		assertEquals("iTrust - Edit Basic Health Record", driver.getTitle());
+		
+		driver.findElement(By.linkText("Patient Information")).click();
+		assertEquals("iTrust - Edit Patient", driver.getTitle());
+		
+		driver.findElement(By.linkText("PHR Information")).click();
+		assertEquals("iTrust - Edit Personal Health Record", driver.getTitle());
+		
+		driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/ul/li[2]/a")).click();
+		assertEquals("iTrust - Login", driver.getTitle());
+		
+		
+		driver = (HtmlUnitDriver)login("5", "pw");
+		assertEquals("iTrust - Patient Home", driver.getTitle());
+		
+		driver.findElement(By.linkText("Access Log")).click();
+		assertEquals("iTrust - View My Access Log", driver.getTitle());
+		
+		WebElement baseTable = driver.findElement(By.className("fTable"));
+		assertFalse(baseTable.getText().contains("Kelly Doctor"));
+		assertTrue(baseTable.getText().contains("Beaker Beaker"));
+	}
+	
+	/**
+	 * Verifies that the access log correctly handle bad date inputs
+	 * @throws Exception
+	 */
+	public void testViewAccessLogBadDateHandling() throws Exception
+	{
+		gen.clearAllTables();
+		gen.standardData();
+		
+		HtmlUnitDriver driver = (HtmlUnitDriver)login("23", "pw");
+		assertEquals("iTrust - Patient Home", driver.getTitle());
+		
+		driver.findElement(By.linkText("Access Log")).click();
+		assertEquals("iTrust - View My Access Log", driver.getTitle());
+		
+		driver.setJavascriptEnabled(true);
+		
+		WebElement startDate_box = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/table/tbody/tr[2]/td[2]/input[1]"));
+		// startDate_box.sendKeys("2000/5/5");
+		driver.executeScript("arguments[0].setAttribute('value', '" + "6/22/2007" +"')", startDate_box);
+		
+		WebElement dueDate_box = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/table/tbody/tr[2]/td[4]/input[1]"));
+		driver.executeScript("arguments[0].setAttribute('value', '" + "6/21/2007" +"')", dueDate_box);
+
+		WebElement submit_button = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/input"));
+		submit_button.click();
+		
+
+		WebElement message = driver.findElement(By.xpath("//*[@id=\"iTrustContent\"]/h2"));		
+		// iTrust should prompt a exception because an invalid input has been made.
+		assertTrue( message.getText().contains("Information not valid"));
+		
+		// refresh two boxes and one button. Use findelementByName this time because "June 22nd" will ne 
+		// be validated after all
+		startDate_box = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/table/tbody/tr[2]/td[2]/input[1]"));
+		driver.executeScript("arguments[0].setAttribute('value', '" + "June 22nd, 2007" +"')", startDate_box);
+		
+		dueDate_box = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/table/tbody/tr[2]/td[4]/input[1]"));
+		driver.executeScript("arguments[0].setAttribute('value', '" + "6/23/2007" +"')", dueDate_box);
+		
+		submit_button = driver.findElement(By.xpath("//*[@id=\"logMIDSelectionForm\"]/div/input"));
+		submit_button.click();
+		
+		message = driver.findElement(By.xpath("//*[@id=\"iTrustContent\"]"));
+		
+		// iTrust should prompt a exception because an invalid input has been made.
+		assertTrue( message.getText().contains("Information not valid"));
+		
 	}
 }
