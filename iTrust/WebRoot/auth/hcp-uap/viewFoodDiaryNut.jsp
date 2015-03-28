@@ -126,7 +126,7 @@ if(sub.equals("yes")){
 SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 loggingAction.logEvent(TransactionType.VIEW_FOOD_DIARY, loggedInMID.longValue(), pidLong , "Nutritionist views patient food diary");
-
+loggingAction.logEvent(TransactionType.ADD_SUGGESTION, loggedInMID.longValue(), pidLong , "Nutritionist adds a suggestion to patient's food diary entry");
 
 
 
@@ -207,7 +207,7 @@ for (FoodDiaryBean fdbean: eatlist) {
         <td style="text-align: center">Grams Sugars</td>
         <td style="text-align: center">Grams Fiber</td>
         <td style="text-align: center">Grams Protein</td>
-        <td style="text-align: center">Nutritionist's Comments</td>
+        <td style="text-align: center">Nutritionist's Suggestions</td>
         <td style="text-align: center"></td>
     </tr>
 

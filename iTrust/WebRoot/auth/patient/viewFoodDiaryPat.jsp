@@ -37,6 +37,7 @@ List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion();
 SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 loggingAction.logEvent(TransactionType.VIEW_FOOD_DIARY, loggedInMID.longValue(), loggedInMID.longValue() , "Patient views their food diary");
+loggingAction.logEvent(TransactionType.VIEW_SUGGESTION, loggedInMID.longValue(), loggedInMID.longValue() , "Patient views their suggestion");
 
 if(session.getAttribute("err1") != null){
 	out.println("<span class=\"myspan\">" + session.getAttribute("err1")+ "<br>" + "</span>");
@@ -149,7 +150,7 @@ for (FoodDiaryBean fdbean: eatlist) {
         <td style="text-align: center">Grams Sugars</td>
         <td style="text-align: center">Grams Fiber</td>
         <td style="text-align: center">Grams Protein</td>
-        <td style="text-align: center">Nutritionist's Comments</td>
+        <td style="text-align: center">Nutritionist's Suggestions</td>
     </tr>
 
 <%
