@@ -20,16 +20,34 @@ public class DietSuggestionAction {
 		patient = loggedInMID;
 	}
 	
+	/**
+	 * Returns a list of all suggestions for a particular patient.
+	 * @return list of suggestions
+	 * @throws DBException
+	 */
 	public List<DietSuggestionBean> getSuggestion() throws DBException {
 		return suggestionDAO.getSuggestionByMID(patient);
 	}
 	
+	/** 
+	 * Returns a specific bean corresponding to a patient's food diary entry.
+	 * @param date date of food diary entry
+	 * @return diet suggestion bean
+	 * @throws DBException 
+	 * @throws ParseException
+	 */
 	public DietSuggestionBean getSuggestionBean(String date) throws DBException, ParseException {
 		return suggestionDAO.getSuggestionByDate(patient, date);
 	}
 	
+	/**
+	 * Adds a suggestion to a specific patient's food diary entry.
+	 * @param suggestionBean the bean containing the suggestion.
+	 * @return true if it was able to add it.
+	 * @throws DBException
+	 * @throws FormValidationException
+	 */
 	public boolean addSuggestion(DietSuggestionBean suggestionBean) throws DBException, FormValidationException {
-		
 		/**
 		 * Handles Date incorrect format
 		 */

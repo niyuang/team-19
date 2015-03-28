@@ -57,10 +57,10 @@ public class DietSuggestionDAO {
 	}
 	
 	/**
-	 * Returns a list of all suggestions for the given MID
+	 * Returns a specific suggestion bean for the given MID
 	 * 
 	 * @param mid the patient's id
-	 * @return a list of SuggestionBean with the information from all the suggestion records
+	 * @return a SuggestionBean with the information from all the suggestion records
 	 * correlating to the given MID
 	 * @throws DBException
 	 * @throws ParseException 
@@ -103,7 +103,6 @@ public class DietSuggestionDAO {
 	}
 	
 	/**
-	 * 
 	 * Inserts a suggestion to a given a diet suggestion bean object
 	 * @return true if added, exception will be thrown if something is wrong
 	 * @throws ParseException 
