@@ -17112,4 +17112,34 @@
         <eResult>The non-nutritionist HCP is redirected to his/her homepage.</eResult>
     </expectedResults>
 </test>
+	<test id="viewEmptySuggestions">
+		<role>HCP</role>
+		<usecase>73</usecase>
+		<dateAdded>03/28/2015</dateAdded>
+		<description>
+			<preconditon>Jennifer Jareau and Spencer Reid are registered and suthenticated with the iTrust system</preconditon>
+			<step>HCP Soencer Reid logs into iTrust</step>
+			<step>Spencer Reid clicks on View Food Diary under the View tab and search for Jennifer Jareau</step></description>
+		<expectResults>
+			<eResult>An empty text box is present next to the daily totals row</eResult></expectResults></test>
+	<test id="writeSuggestion">
+		<dateAdded>03/28/2015</dateAdded>
+		<role>HCP</role>
+		<usecase>73</usecase>
+		<description>
+			<precondition>HCP Spencer Reid logs into iTrust</precondition>
+			<step>Spencer Reid click on View Food Diary and search for Jennifer Jareau</step>
+			<step>click text box xorresponding to 09/30/2012 and write "Good Job" and save</step></description>
+		<expectedResults>
+			<eResult>text box has "Good Job" in it</eResult></expectedResults></test>
+	<test id="ViewSuggestion">
+		<usecase>73</usecase>
+		<role>Patient</role>
+		<dateAdded>03/28/2015</dateAdded>
+		<description>
+			<preconditon>Jennifer Jareau logs into iTrust</preconditon>
+			<step>clicks on View Food Diary</step></description>
+		<expectedResults>
+			<eResult>"Good Job"next to her total row for 09/30/2012</eResult></expectedResults>
+	</test>
 </BlackBoxTestPlan>

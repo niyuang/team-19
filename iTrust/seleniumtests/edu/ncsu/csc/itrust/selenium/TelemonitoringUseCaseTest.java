@@ -6,11 +6,9 @@ import java.util.Date;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
-import edu.ncsu.csc.itrust.http.iTrustHTTPTest;
 
 /**
  * Use Case 34
