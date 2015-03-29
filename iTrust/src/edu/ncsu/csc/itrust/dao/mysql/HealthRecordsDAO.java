@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.HealthRecord;
 import edu.ncsu.csc.itrust.beans.loaders.HealthRecordsBeanLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
 
 /**
  * Used for all health records where a whole history is kept.
@@ -66,6 +68,91 @@ public class HealthRecordsDAO {
 		}
 		return records;
 	}
+	
+	/**
+	 * @author Yuang Ni
+	 * Get one patient's most recent height.
+	 * Tricky part is: some patient's height keeps changing over time. We 
+	 * need to construct a SQL query to get the most recent one.
+	 * 
+	 * Info about nested SQL: http://www.mysqltutorial.org/mysql-subquery/
+	 * 
+	 * @param mid mid The MID of the patient to look up.
+	 * @return A java.util.List of HealthRecords.
+	 * @throws DBException
+	 */
+	public double getPatientsLatestHeight(long mid) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		double mostRecentHeight = 0.0;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT HEIGHT FROM personalhealthinformation WHERE OfficeVisitID = ( SELECT MAX(OfficeVisitID) FROM personalhealthinformation Where PatientID = ?)");
+			ps.setLong(1, mid);
+			ResultSet rs;
+			rs = ps.executeQuery();
+			//mostRecentHeight = rs.getDouble(1);
+			// ---------------------------------
+			// For some strange reaseon, getDouble(column) would not work. So I have to switch to getDouble(column tag)
+			if (rs.next()) {
+				mostRecentHeight = rs.getDouble("HEIGHT");
+				rs.close();
+				ps.close();
+			} else {
+				rs.close();
+				ps.close();
+				// throw new ITrustException("User does not exist with the designated role");
+			}
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+		return mostRecentHeight;
+	}
+	
+	/**
+	 * @author Yuang Ni
+	 * Get one patient's most recent weight.
+	 * Tricky part is: some patient's weight keeps changing over time. We 
+	 * need to construct a SQL query to get the most recent one.
+	 * 
+	 * Info about nested SQL: http://www.mysqltutorial.org/mysql-subquery/
+	 * 
+	 * @param mid mid The MID of the patient to look up.
+	 * @return A java.util.List of HealthRecords.
+	 * @throws DBException
+	 */
+	public double getPatientsLatestWeight(long mid) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		double mostRecentWeight = 0.0;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT WEIGHT FROM personalhealthinformation WHERE OfficeVisitID = ( SELECT MAX(OfficeVisitID) FROM personalhealthinformation Where PatientID = ?)");
+			ps.setLong(1, mid);
+			ResultSet rs;
+			rs = ps.executeQuery();
+			//mostRecentHeight = rs.getDouble(1);
+			// ---------------------------------
+			// For some strange reaseon, getDouble(column) would not work. So I have to switch to getDouble(column tag)
+			if (rs.next()) {
+				mostRecentWeight = rs.getDouble("WEIGHT");
+				rs.close();
+				ps.close();
+			} else {
+				rs.close();
+				ps.close();
+				// throw new ITrustException("User does not exist with the designated role");
+			}
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+		return mostRecentWeight;
+	}
+	
 	
 	/**
 	 * 

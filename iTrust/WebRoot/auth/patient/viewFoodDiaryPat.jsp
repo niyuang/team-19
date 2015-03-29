@@ -1,3 +1,6 @@
+<%@page import="edu.ncsu.csc.itrust.action.GetPatientsMostRecentHeighWeight"%>
+<%@page import="edu.ncsu.csc.itrust.beans.PatientBean"%>
+<%@page import="edu.ncsu.csc.itrust.action.ViewPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.FoodDiaryAction"%> <% //  Fooddiaryaction %> 
 <%@page import="edu.ncsu.csc.itrust.beans.FoodDiaryBean"%> <% //  Changed to EntryBean %> 
 
@@ -264,5 +267,62 @@ for(FoodDiaryBean superDate: eatlist) {
 %>
 
 	</table>
+
+
+<%	
+	// similar construction as editMyDemograph
+	ViewPatientAction vpa = new ViewPatientAction(prodDAO,
+		loggedInMID.longValue(), "" + loggedInMID.longValue());
+	PatientBean pb = vpa.getPatient(loggedInMID.toString());
+	GetPatientsMostRecentHeighWeight gpmrhw = new GetPatientsMostRecentHeighWeight(prodDAO);
+%>
+
+<br>
+<h2>Calculate Daily Calories and MacroNutrition:</h2><br>
+<h4>Recommended calories are based on individual's gender, most recent height, most recent weight, and age.</h4>
+<h5>Your information as following:</h5>
+<br>
+<div align="center">
+<table class="fTable" align="center">
+	<tbody>
+	<tr class="subHeader">
+		<td>Name:</td>
+		<td>
+		<%= StringEscapeUtils.escapeHtml(pb.getFirstName() + " " + pb.getLastName()) %>
+		</td>
+		
+		<td>Gender:</td>
+		<td>
+		<%= StringEscapeUtils.escapeHtml(pb.getGender().toString()) %>
+		</td>
+
+		<td>The most recent Height:</td>
+		<td>
+		<%= gpmrhw.getPatientHeight(loggedInMID) %>
+		</td>
+
+		<td>The most recent Height:</td>
+		<td>
+		<%= gpmrhw.getPatientWeight(loggedInMID) %>	
+		</td>
+
+		<td>Age:</td>
+		<td>
+		<%= pb.getAge() %>		
+		</td>
+	</tr>
+</tbody></table>
+<br>
+<input type="submit" name="submit" value="Calculate My Recommanded Calories">
+
+</div>
+
+<% // From piazza: How to insert a percentage diagram:
+   // source: https://google-developers.appspot.com/chart/interactive/docs/quick_start
+   // Mar 29, 2:02 PM
+%>
+
+
+
 
 <%@include file="/footer.jsp"%>
