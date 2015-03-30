@@ -35,6 +35,23 @@ public class HealthRecordFormValidator extends BeanValidator<HealthRecordForm> {
 			throw new FormValidationException(errorList);
 	}
 	
+	/**
+	 * @author Yuang 
+	 * 
+	 * Light-weight method to check if height and weight in one HealthRecord Form are valid.
+	 * Will be used in Calculate daily calories and macros and viewFoodDiaryPat.jsp
+	 * 7:57 PM Mar 29
+	 */
+	public void validateHeightAndWeight(HealthRecordForm bean) throws FormValidationException {
+		ErrorList errorList = new ErrorList();
+		errorList.addIfNotNull(checkNotZero("Height", bean.getHeight(), ValidationFormat.Height, false));
+		errorList.addIfNotNull(checkNotZero("Weight", bean.getWeight(), ValidationFormat.Weight, false));
+		if (errorList.hasErrors())
+			throw new FormValidationException(errorList);
+	}
+	
+	
+	
 	public void validateYouth(HealthRecordForm bean) throws FormValidationException{
 		ErrorList errorList = new ErrorList();
 		errorList.addIfNotNull(checkNotZero("Height", bean.getHeight(), ValidationFormat.Height, false));

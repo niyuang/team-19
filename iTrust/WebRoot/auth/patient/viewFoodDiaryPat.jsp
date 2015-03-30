@@ -1,9 +1,10 @@
+<%@page import="edu.ncsu.csc.itrust.validate.HealthRecordFormValidator"%>
+<%@page import="edu.ncsu.csc.itrust.beans.forms.HealthRecordForm"%>
 <%@page import="edu.ncsu.csc.itrust.action.GetPatientsMostRecentHeighWeight"%>
 <%@page import="edu.ncsu.csc.itrust.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.FoodDiaryAction"%> <% //  Fooddiaryaction %> 
 <%@page import="edu.ncsu.csc.itrust.beans.FoodDiaryBean"%> <% //  Changed to EntryBean %> 
-
 <%@page import="edu.ncsu.csc.itrust.action.DietSuggestionAction"%>  
 <%@page import="edu.ncsu.csc.itrust.beans.DietSuggestionBean"%> 
 
@@ -12,8 +13,9 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@ page import="java.io.BufferedReader" %>
+<%@page import="java.text.DecimalFormat"%>  
 
-
+<%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
 <%@page import="edu.ncsu.csc.itrust.exception.DBException"%>
 
@@ -282,6 +284,11 @@ for(FoodDiaryBean superDate: eatlist) {
 <h4>Recommended calories are based on individual's gender, most recent height, most recent weight, and age.</h4>
 <h5>Your information as following:</h5>
 <br>
+
+<form action="viewFoodDiaryPat.jsp" id="weightAndHeightForm" method="post">
+
+<input type="hidden" name="sortBy" value="">
+
 <div align="center">
 <table class="fTable" align="center">
 	<tbody>
@@ -290,39 +297,136 @@ for(FoodDiaryBean superDate: eatlist) {
 		<td>
 		<%= StringEscapeUtils.escapeHtml(pb.getFirstName() + " " + pb.getLastName()) %>
 		</td>
-		
 		<td>Gender:</td>
 		<td>
 		<%= StringEscapeUtils.escapeHtml(pb.getGender().toString()) %>
 		</td>
-
 		<td>The most recent Height:</td>
-		<td>
-		<%= gpmrhw.getPatientHeight(loggedInMID) %>
+		<td><% 
+			// -------- If the user has not submit their new value yet, their most recent value in database has to be in the text box.
+			// -------- Else new values will be in the box
+			if(request.getParameter("submit") != null) {
+				%><input name="TheMostRecentHeight" value= <%= request.getParameter("TheMostRecentHeight") %>> <% 
+			} else {
+				%><input name="TheMostRecentHeight" value= <%= gpmrhw.getPatientHeight(loggedInMID) %>> <% 
+			}
+		%>			
 		</td>
-
-		<td>The most recent Height:</td>
+		<td>The most recent Weight:</td>
 		<td>
-		<%= gpmrhw.getPatientWeight(loggedInMID) %>	
+			<% 
+			if(request.getParameter("submit") != null) {
+				%><input name="TheMostRecentWeight" value= <%= request.getParameter("TheMostRecentWeight") %>> <% 
+			} else {
+				%><input name="TheMostRecentWeight" value= <%= gpmrhw.getPatientWeight(loggedInMID) %>> <% 
+			}
+			%>	
 		</td>
-
 		<td>Age:</td>
 		<td>
-		<%= pb.getAge() %>		
+		<%= pb.getAge()%>
 		</td>
 	</tr>
 </tbody></table>
 <br>
 <input type="submit" name="submit" value="Calculate My Recommanded Calories">
 
+<%	
+	
+	if(request.getParameter("submit") != null) {
+		// If value in weight and height have been changed,
+		// those value has to be validated
+	    // In order to validate the new value in a convinient way 
+	    // We'll create HealthRecordForm which only contains weight and height.
+	    // Making life easier! 
+		HealthRecordForm weightHeight = new HealthRecordForm();
+		String weight = request.getParameter("TheMostRecentWeight");
+		String height = request.getParameter("TheMostRecentHeight");
+		
+		weightHeight.setHeight(height);
+		weightHeight.setWeight(weight);
+		
+		HealthRecordFormValidator hf = new HealthRecordFormValidator();
+		
+		
+		try{
+			hf.validateHeightAndWeight(weightHeight);
+		} catch (FormValidationException e) {	
+			%>
+			<div align=center>
+				<span class="iTrustError"><%=StringEscapeUtils.escapeHtml(e.getMessage())%></span>
+			</div>
+			<%
+		}
+		
+		// <-------------------------- Calculation part -------------------------->
+		// Formula source: http://www.wikihow.com/Calculate-Your-Total-Daily-Calorie-Needs
+		// For female: (4.7 x your height in inches) + (4.35 x your weight in pounds) - (4.7 x your age in years) + 655
+		// For male: (12.7 x your height in inches) + (6.23 x your weight in pounds) - (6.8 x your age in years) + 66
+		
+		double BMR = 0.0;
+		// we want the result to be in 0.0 decimal form
+		DecimalFormat df = new DecimalFormat( "0.0");  
+		if(pb.getGender().equals("Female")) {
+			BMR = 4.7 * Double.parseDouble(height) + 4.35 * Double.parseDouble(weight) - (4.7 * pb.getAge()) + 655;
+		} else {
+			BMR = 12.7 * Double.parseDouble(height) + 6.23 * Double.parseDouble(weight) - (6.8 * pb.getAge()) + 66;
+		}
+		
+		double recmdCarb = BMR * 0.6;
+		double recmdSugar = BMR * 0.1;
+		double recmdProtein = BMR * 0.225;
+		double recmdFat = BMR * 0.075;
+		
+		// <-------------------------- Chart part -------------------------->
+		%>
+			<table class="fTable" align="center">
+				<tbody>
+				<tr>
+        		<th colspan="11">Recommendation:</th>
+    			</tr>
+				<tr class="BMR">
+					<td>BMR(Daily Calories needed):</td>
+					<td>
+						<%= df.format(BMR)%>
+					</td>
+				</tr>
+				<tr class="Carb">
+					<td>Carb needed(approximately 60% of BMR):</td>
+					<td>
+						<%= df.format(recmdCarb)%>
+					</td>
+				</tr>
+				<tr class="Sugar">
+					<td>Sugar needed(approximately 10% of BMR):</td>
+					<td>
+						<%= df.format(recmdSugar)%>
+					</td>
+				</tr>
+				<tr class="Protein">
+					<td>Protein needed(approximately 22.5% of BMR):</td>
+					<td>
+						<%= df.format(recmdProtein)%>
+					</td>
+				</tr>
+				<tr class="Fat">
+					<td>Fat needed(approximately 7.5% of BMR):</td>
+					<td>
+						<%= df.format(recmdFat)%>
+					</td>
+				</tr>
+			</tbody></table>
+		<%
+		//  <-------------------------- Percentge graph part -------------------------->
+		// From piazza: How to insert a percentage diagram:
+	    // source: https://google-developers.appspot.com/chart/interactive/docs/quick_start
+	    // 10:00 PM Mar 29, 2015
+	} 
+%> 
+
+
 </div>
-
-<% // From piazza: How to insert a percentage diagram:
-   // source: https://google-developers.appspot.com/chart/interactive/docs/quick_start
-   // Mar 29, 2:02 PM
-%>
-
-
+</form>
 
 
 <%@include file="/footer.jsp"%>
