@@ -32,6 +32,10 @@
 <div style="color: red;">
 
 <%
+// When generating graph for the total input of a single day,
+// we will store each day's input in a list in order to avoid 
+// to loop the foodentry list and calculate everything again. 
+List<FoodDiaryBean> dailyTotal = new ArrayList<FoodDiaryBean>();
 
 FoodDiaryAction action = new FoodDiaryAction(prodDAO, loggedInMID);
 List<FoodDiaryBean> eatlist = action.getFoodDiary();
@@ -207,7 +211,6 @@ for(FoodDiaryBean superDate: eatlist) {
 		}
 	}
 %>	
-
 	<tr>
 					<td style="text-align: center; min-width: 8em">
 	        <%= StringEscapeUtils.escapeHtml(entDate) %>				
@@ -225,8 +228,11 @@ for(FoodDiaryBean superDate: eatlist) {
             <%= StringEscapeUtils.escapeHtml(Double.toString(dFiber)) %>
     </td>            <td style="text-align: center; min-width: 8em">
             <%= StringEscapeUtils.escapeHtml(Double.toString(dProt)) %>
-    </td>               
-
+    </td>      
+    <td>
+			<%  // Include a Nutritionist's Suggestions  %>
+    </td>     
+	
     <%
     	if(suggestionList.size() == 0) {
     		%> 
@@ -252,9 +258,22 @@ for(FoodDiaryBean superDate: eatlist) {
 	
 	%>
             
-	</tr>
+	</tr>   
 	
 <%
+	// add daily total to dailytotal list 
+	// will be used in dropdown box
+	FoodDiaryBean tmp = new FoodDiaryBean();
+	tmp.setCals(dCal);
+	tmp.setFat(dFat);
+	tmp.setSodium(dSod);
+	tmp.setCarbs(dCarbs);
+	tmp.setSugar(dSugar);
+	tmp.setFiber(dFiber);
+	tmp.setProtein(dProt);
+	tmp.setEntryDate(entDate);
+	
+	dailyTotal.add(tmp);
 	
 	//reset counter
 	dCal = 0;
@@ -274,7 +293,7 @@ for(FoodDiaryBean superDate: eatlist) {
 <%	
 	// similar construction as editMyDemograph
 	ViewPatientAction vpa = new ViewPatientAction(prodDAO,
-		loggedInMID.longValue(), "" + loggedInMID.longValue());
+	loggedInMID.longValue(), "" + loggedInMID.longValue());
 	PatientBean pb = vpa.getPatient(loggedInMID.toString());
 	GetPatientsMostRecentHeighWeight gpmrhw = new GetPatientsMostRecentHeighWeight(prodDAO);
 %>
@@ -326,13 +345,41 @@ for(FoodDiaryBean superDate: eatlist) {
 		<td>
 		<%= pb.getAge()%>
 		</td>
+		<td>
+			Comparing to my food entry on 
+			<% 
+				if(dailyTotal.size() == 0 || dailyTotal == null) {
+					%> No Data Found on my record. -> Add sth first.<%
+				} else {
+					%>
+					<select name ="selectedEntryOnDate" >
+					<% 
+					  for(int i = 0; i < dailyTotal.size(); i++) {
+						  String singleEntryDate = dailyTotal.get(i).getEntryDate();
+						  
+						  // Setting up the option for the dropdown box,
+						  // The value of one option has to be assigned dynamically
+						  // The value represents the index of one single day's total in the list.
+						  %> 
+						  <option value = <%= i %>><%= singleEntryDate %></option>
+						  <%
+				
+					  }
+					%>
+					</select>
+					<% 
+				}
+			
+			%>
+
+		</td>
 	</tr>
 </tbody></table>
 <br>
 <input type="submit" name="submit" value="Calculate My Recommanded Calories">
-
+<br>
+<br>
 <%	
-	
 	if(request.getParameter("submit") != null) {
 		// If value in weight and height have been changed,
 		// those value has to be validated
@@ -348,9 +395,203 @@ for(FoodDiaryBean superDate: eatlist) {
 		
 		HealthRecordFormValidator hf = new HealthRecordFormValidator();
 		
+		// request.getParameter will return a index. The index points to a food entry, which 
+		// contains the total input of one single day.
+		String indexOfEntryToPrint = request.getParameter("selectedEntryOnDate");
+		if(indexOfEntryToPrint == null){
+			// Do nothing when returned String not valid, which means there is no element in dailyTotal List.
+		} else {
+			FoodDiaryBean fdb = dailyTotal.get(Integer.parseInt(indexOfEntryToPrint));
+			%>
+			<%
+			//  <-------------------------- Daily Percentge graph  scripting part -------------------------->
+		    // 12:28 AM Mar 29, 2015 Yuang Ni
+		    %>
+			<head>
+		    <!--Load the AJAX API-->
+		    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		    <script type="text/javascript">
+
+		      // Load the Visualization API and the piechart package.
+		      google.load('visualization', '1.0', {'packages':['corechart']});
+
+		      // Set a callback to run when the Google Visualization API is loaded.
+		      google.setOnLoadCallback(drawChart);
+		      // Callback that creates and populates a data table,
+		      // instantiates the pie chart, passes in the data and
+		      // draws it.
+		      
+		      function drawChart() {
+
+		        // Create the data table.
+		        // Be sure to use =BMR when passing java variable to javascript
+		        var data = new google.visualization.DataTable();
+		        data.addColumn('string', 'Value Name');
+		        data.addColumn('number', 'Value');
+		        data.addRows([
+		                      ['Carb', <%= fdb.getCarbs()%>],
+		                      ['Sugar', <%= fdb.getSugar()%>],
+		                      ['Protein', <%= fdb.getProtein()%>],
+		                      ['Fat', <%= fdb.getFat()%>]
+		                    ]);
+		   
+		        // Set chart options
+		        var options = {'title':'How Much Daily Calories and Macronutrient you actually TAKE',
+		                       'width':300,
+		                       'height':400};
+
+		        // Instantiate and draw our chart, passing in some options.
+		        var chart = new google.visualization.PieChart(document.getElementById('chart_div_2'));
+		        chart.draw(data, options);
+		      }
+		    </script>
+		  </head>
+			<%
+		}
+
+		
+		%> 
+	
+		<% 
 		
 		try{
 			hf.validateHeightAndWeight(weightHeight);
+			
+			// <-------------------------- Calculation part -------------------------->
+			// Formula source: http://www.wikihow.com/Calculate-Your-Total-Daily-Calorie-Needs
+			// For female: (4.7 x your height in inches) + (4.35 x your weight in pounds) - (4.7 x your age in years) + 655
+			// For male: (12.7 x your height in inches) + (6.23 x your weight in pounds) - (6.8 x your age in years) + 66
+			
+			double BMR = 0.0;
+			// we want the result to be in 0.0 decimal form
+			DecimalFormat df = new DecimalFormat( "0.0");  
+			if(pb.getGender().equals("Female")) {
+				BMR = 4.7 * Double.parseDouble(height) + 4.35 * Double.parseDouble(weight) - (4.7 * pb.getAge()) + 655;
+			} else {
+				BMR = 12.7 * Double.parseDouble(height) + 6.23 * Double.parseDouble(weight) - (6.8 * pb.getAge()) + 66;
+			}
+			
+			
+			BMR = Double.parseDouble(df.format(BMR));
+			double recmdCarb = Double.parseDouble(df.format(BMR * 0.6));
+			double recmdSugar = Double.parseDouble(df.format(BMR * 0.1));
+			double recmdProtein = Double.parseDouble(df.format(BMR * 0.225));
+			double recmdFat = Double.parseDouble(df.format(BMR * 0.075));
+			
+			
+			// <-------------------------- Chart part -------------------------->
+			// Assign ID to each tr in table so Javascript can capture them to draw diagram
+			// Draw graph 1 and 2
+			%>
+			<table aligen = "center">
+				<td>
+					<table id = "RecommendationData" class="fTable">
+						<tbody>
+							<tr>
+			        			<th colspan="11">Recommendation:</th>
+			    			</tr>
+							<tr class="BMR">
+								<td id ="BMRName">BMR(Daily Calories needed):</td>
+								<td id ="BMRValue">
+									<%= BMR %>
+								</td>
+							</tr>
+							<tr class="Carb">
+								<td id ="CarbName">Carb needed(approximately 60% of BMR):</td>
+								<td id ="CarbValue">
+									<%= recmdCarb %>
+								</td>
+							</tr>
+							<tr class="Sugar">
+								<td id ="SugarName">Sugar needed(approximately 10% of BMR):</td>
+								<td id ="SuagrValue">
+									<%=  recmdSugar %>
+								</td>
+							</tr>
+							<tr class="Protein">
+								<td id ="ProteinName">Protein needed(approximately 22.5% of BMR):</td>
+								<td id ="ProteinValue">
+									<%= recmdProtein %>
+								</td>
+							</tr>
+							<tr class="Fat">
+								<td id ="FatName">Fat needed(approximately 7.5% of BMR):</td>
+								<td id ="FatValue">
+									<%= recmdFat %>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td>
+					<div id="chart_div_1"></div>
+				</td>
+				 <td>
+					<%
+					// Draw the second graph
+					// One graph will be generated for one single day
+					if (dailyTotal.isEmpty() || dailyTotal == null){
+						%>
+							<h3>No data found on my record</h3>
+						<%
+					} else {
+						%>
+						<div id="chart_div_2"></div>
+						<%	
+					}
+					%>
+				</td> 
+				
+			</table>	
+			<%
+			//  <-------------------------- Percentge graph 1 scripting part -------------------------->
+			// From piazza: How to insert a percentage diagram:
+		    // source: https://google-developers.appspot.com/chart/interactive/docs/quick_start
+		    // 10:00 PM Mar 29, 2015
+		    %>
+			  <head>
+		    <!--Load the AJAX API-->
+		    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		    <script type="text/javascript">
+
+		      // Load the Visualization API and the piechart package.
+		      google.load('visualization', '1.0', {'packages':['corechart']});
+
+		      // Set a callback to run when the Google Visualization API is loaded.
+		      google.setOnLoadCallback(drawChart);
+		      // Callback that creates and populates a data table,
+		      // instantiates the pie chart, passes in the data and
+		      // draws it.
+		    
+		      function drawChart() {
+
+		        // Create the data table.
+		        // Be sure to use =BMR when passing java variable to javascript
+		        var data = new google.visualization.DataTable();
+		        data.addColumn('string', 'Value Name');
+		        data.addColumn('number', 'Value');
+		        data.addRows([
+		                      ['Carb', <%= recmdCarb%>],
+		                      ['Sugar', <%= recmdSugar%>],
+		                      ['Protein', <%= recmdProtein%>],
+		                      ['Fat', <%= recmdFat%>]
+		                    ]);
+
+
+		        // Set chart options
+		        var options = {'title':'How Much Daily Calories and Macronutrient you NEED',
+		                       'width':400,
+		                       'height':300};
+
+		        // Instantiate and draw our chart, passing in some options.
+		        var chart = new google.visualization.PieChart(document.getElementById('chart_div_1'));
+		        chart.draw(data, options);
+		      }
+		    </script>
+		    
+		  </head> 
+		  
+			<%
 		} catch (FormValidationException e) {	
 			%>
 			<div align=center>
@@ -358,69 +599,6 @@ for(FoodDiaryBean superDate: eatlist) {
 			</div>
 			<%
 		}
-		
-		// <-------------------------- Calculation part -------------------------->
-		// Formula source: http://www.wikihow.com/Calculate-Your-Total-Daily-Calorie-Needs
-		// For female: (4.7 x your height in inches) + (4.35 x your weight in pounds) - (4.7 x your age in years) + 655
-		// For male: (12.7 x your height in inches) + (6.23 x your weight in pounds) - (6.8 x your age in years) + 66
-		
-		double BMR = 0.0;
-		// we want the result to be in 0.0 decimal form
-		DecimalFormat df = new DecimalFormat( "0.0");  
-		if(pb.getGender().equals("Female")) {
-			BMR = 4.7 * Double.parseDouble(height) + 4.35 * Double.parseDouble(weight) - (4.7 * pb.getAge()) + 655;
-		} else {
-			BMR = 12.7 * Double.parseDouble(height) + 6.23 * Double.parseDouble(weight) - (6.8 * pb.getAge()) + 66;
-		}
-		
-		double recmdCarb = BMR * 0.6;
-		double recmdSugar = BMR * 0.1;
-		double recmdProtein = BMR * 0.225;
-		double recmdFat = BMR * 0.075;
-		
-		// <-------------------------- Chart part -------------------------->
-		%>
-			<table class="fTable" align="center">
-				<tbody>
-				<tr>
-        		<th colspan="11">Recommendation:</th>
-    			</tr>
-				<tr class="BMR">
-					<td>BMR(Daily Calories needed):</td>
-					<td>
-						<%= df.format(BMR)%>
-					</td>
-				</tr>
-				<tr class="Carb">
-					<td>Carb needed(approximately 60% of BMR):</td>
-					<td>
-						<%= df.format(recmdCarb)%>
-					</td>
-				</tr>
-				<tr class="Sugar">
-					<td>Sugar needed(approximately 10% of BMR):</td>
-					<td>
-						<%= df.format(recmdSugar)%>
-					</td>
-				</tr>
-				<tr class="Protein">
-					<td>Protein needed(approximately 22.5% of BMR):</td>
-					<td>
-						<%= df.format(recmdProtein)%>
-					</td>
-				</tr>
-				<tr class="Fat">
-					<td>Fat needed(approximately 7.5% of BMR):</td>
-					<td>
-						<%= df.format(recmdFat)%>
-					</td>
-				</tr>
-			</tbody></table>
-		<%
-		//  <-------------------------- Percentge graph part -------------------------->
-		// From piazza: How to insert a percentage diagram:
-	    // source: https://google-developers.appspot.com/chart/interactive/docs/quick_start
-	    // 10:00 PM Mar 29, 2015
 	} 
 %> 
 
