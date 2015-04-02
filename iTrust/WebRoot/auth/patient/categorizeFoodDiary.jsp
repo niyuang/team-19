@@ -51,7 +51,7 @@ pageTitle = "iTrust - Categorize Food Diary";
 <br>
 
 <form method="post" action="validateSingleDate.jsp" name=single>
-<h4>Single Date</h4>
+<h4>&nbsp;&nbsp;Single Date</h4>
 <table>
 <tr>
 <td><span class="font1">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="singleDate"></td>
@@ -64,11 +64,23 @@ pageTitle = "iTrust - Categorize Food Diary";
 <br>
 
 <form method="post" action="validateRangeDate.jsp" name=range>
-<h4>Range of Dates</h4>
+<h4>&nbsp;&nbsp;Range of Dates</h4>
 <table>
 <tr>
 <td><span class="font1">Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="rangeDateStart"></td>
 <td><span class="font1">End&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="rangeDateEnd"></td>
+<td><input type="submit" value="Filter"></td>
+</tr>
+</table>
+</form>
+
+<br>
+<br>
+
+<form method="post" action="viewFoodDiaryPat.jsp" name=range>
+<h4>&nbsp;&nbsp;View All</h4>
+<table>
+<tr>
 <td><input type="submit" value="Filter"></td>
 </tr>
 </table>

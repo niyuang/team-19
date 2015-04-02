@@ -28,9 +28,8 @@
 			<li><a href="/iTrust/auth/patient/viewPatientReferrals.jsp">My Referrals</a>
 			<li><a href="/iTrust/auth/patient/findExpert.jsp">Find an Expert</a>
 			<li><a href="/iTrust/auth/patient/myBills.jsp">My Bills</a>
-			<li><a href="/iTrust/auth/patient/viewFoodDiaryPat.jsp">View Food Diary</a>
+			<li><a href="/iTrust/auth/patient/categorizeFoodDiary.jsp">View Food Diary</a>
 			<li><a href="/iTrust/auth/patient/viewBodyMeasurement.jsp">View Body Measurements</a>
-			<li><a href="/iTrust/auth/patient/categorizeFoodDiary.jsp">Test to Filter Food Diary</a>
 		</ul>
 	</div>
 </div>
