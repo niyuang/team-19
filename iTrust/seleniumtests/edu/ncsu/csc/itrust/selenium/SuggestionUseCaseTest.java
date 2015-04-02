@@ -9,6 +9,7 @@ import edu.ncsu.csc.itrust.enums.TransactionType;
 
 public class SuggestionUseCaseTest extends iTrustSeleniumTest {
 
+
 	/**
 	 * setUp
 	 */
@@ -30,11 +31,14 @@ public class SuggestionUseCaseTest extends iTrustSeleniumTest {
 		assertEquals("iTrust - HCP Home", driver.getTitle());
 		assertLogged(TransactionType.HOME_VIEW, 9900000025L, 0L, "");
 				
+
 		//Click View Food Diary
 		driver.findElement(By.xpath("//a[text()='View Food Diary']")).click();
 		driver.findElement(By.name("UID_PATIENTID")).sendKeys("685");
 		driver.findElement(By.xpath("//input[@value='685']")).submit();
-		
+		driver.findElement(By.cssSelector("#viewall > table > tbody > tr > td > input[type=\"submit\"]")).click();
+		    
+		    
 		//empty text box present next to daily total
 		assertEquals("Patient Daily Totals", driver.findElement(By.xpath("//table[2]/tbody/tr/th")).getText());
 		assertEquals("", driver.findElement(By.name("suggestion")).getValue());		
@@ -56,11 +60,13 @@ public class SuggestionUseCaseTest extends iTrustSeleniumTest {
 		driver.findElement(By.xpath("//a[text()='View Food Diary']")).click();
 		driver.findElement(By.name("UID_PATIENTID")).sendKeys("685");
 		driver.findElement(By.xpath("//input[@value='685']")).submit();
-				
+		
+		driver.findElement(By.cssSelector("#viewall > table > tbody > tr > td > input[type=\"submit\"]")).click();
+		
 		//empty text box present next to daily total
 		assertEquals("Patient Daily Totals", driver.findElement(By.xpath("//table[2]/tbody/tr/th")).getText());
 		assertEquals("", driver.findElement(By.name("suggestion")).getValue());		
-
+		
 		//write suggestion "Good Job"
 		driver.findElement(By.name("suggestion")).sendKeys("Good Job");
 		driver.findElement(By.name("suggestion")).submit();
@@ -81,20 +87,22 @@ public class SuggestionUseCaseTest extends iTrustSeleniumTest {
 		HtmlUnitDriver driver = (HtmlUnitDriver) login("9900000025", "pw");
 		assertEquals("iTrust - HCP Home", driver.getTitle());
 		assertLogged(TransactionType.HOME_VIEW, 9900000025L, 0L, "");
-								
+						
 		//Click View Food Diary
 		driver.findElement(By.xpath("//a[text()='View Food Diary']")).click();
 		driver.findElement(By.name("UID_PATIENTID")).sendKeys("685");
 		driver.findElement(By.xpath("//input[@value='685']")).submit();
-						
+		
+		driver.findElement(By.cssSelector("#viewall > table > tbody > tr > td > input[type=\"submit\"]")).click();
+		
 		//empty text box present next to daily total
 		assertEquals("Patient Daily Totals", driver.findElement(By.xpath("//table[2]/tbody/tr/th")).getText());
 		assertEquals("", driver.findElement(By.name("suggestion")).getValue());		
-
+		
 		//write suggestion "Good Job"
 		driver.findElement(By.name("suggestion")).sendKeys("Good Job");
 		driver.findElement(By.name("suggestion")).submit();
-				
+		
 		//suggestion saved
 		assertTrue(driver.findElement(By.cssSelector("BODY")).getText().contains("Suggestion Successfully Added"));
 		assertEquals("Good Job", driver.findElement(By.name("suggestion")).getValue());		
@@ -109,11 +117,11 @@ public class SuggestionUseCaseTest extends iTrustSeleniumTest {
 		assertLogged(TransactionType.HOME_VIEW, 685L, 0L, "");
 		
 		//Click View Food Diary
-		pdriver.findElement(By.linkText("View Food Diary")).click();
+		pdriver.findElement(By.xpath("//a[text()='View Food Diary']")).click();
+		pdriver.findElement(By.cssSelector("#viewall > table > tbody > tr > td > input[type=\"submit\"]")).click();
 		
 		//suggestion next to total for 9/30/2012
-		assertEquals("Patient Daily Totals", pdriver.findElement(By.xpath("//table[2]/tbody/tr/th")).getText());
-		assertEquals("Good Job", pdriver.findElement(By.xpath("//table[2]/tbody/tr[3]/td[10]")).getText());		
+		assertTrue(pdriver.findElement(By.cssSelector("BODY")).getText().contains("Good Job"));	
 
 	}
 }

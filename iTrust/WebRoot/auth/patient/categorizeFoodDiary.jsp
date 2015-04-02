@@ -50,7 +50,7 @@ pageTitle = "iTrust - Categorize Food Diary";
 <br>
 <br>
 
-<form method="post" action="validateSingleDate.jsp" name=single>
+<form method="post" action="validateSingleDate.jsp" name=single id="sing">
 <h4>&nbsp;&nbsp;Single Date</h4>
 <table>
 <tr>
@@ -63,7 +63,7 @@ pageTitle = "iTrust - Categorize Food Diary";
 <br>
 <br>
 
-<form method="post" action="validateRangeDate.jsp" name=range>
+<form method="post" action="validateRangeDate.jsp" name=range id="rangedate">
 <h4>&nbsp;&nbsp;Range of Dates</h4>
 <table>
 <tr>
@@ -77,7 +77,7 @@ pageTitle = "iTrust - Categorize Food Diary";
 <br>
 <br>
 
-<form method="post" action="viewFoodDiaryPat.jsp" name=range>
+<form method="post" action="viewFoodDiaryPat.jsp" name=all id="viewall">
 <h4>&nbsp;&nbsp;View All</h4>
 <table>
 <tr>

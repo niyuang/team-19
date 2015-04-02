@@ -74,7 +74,7 @@ String charlie = beta.getSpecialty();
 <br>
 <br>
 
-<form method="post" action="validateSingleDate.jsp" name=single>
+<form method="post" action="validateSingleDate.jsp" name=single id="sing">
 <h4>&nbsp;&nbsp;Single Date</h4>
 <table>
 <tr>
@@ -101,7 +101,7 @@ String charlie = beta.getSpecialty();
 <br>
 <br>
 
-<form method="post" action="viewFoodDiaryNut.jsp" name=range>
+<form method="post" action="viewFoodDiaryNut.jsp" name=all id="viewall" >
 <h4>&nbsp;&nbsp;View All</h4>
 <table>
 <tr>
