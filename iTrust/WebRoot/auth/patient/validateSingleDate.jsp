@@ -30,8 +30,8 @@
 		System.out.println("bad date format");
 	}
 	
-	
-	response.sendRedirect("/iTrust/auth/patient/categorizeFoodDiary.jsp");
+	session.setAttribute("single", singleDate);
+	response.sendRedirect("/iTrust/auth/patient/viewFoodDiaryPat.jsp");
 
 %>
 

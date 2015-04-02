@@ -33,7 +33,9 @@
 	}
 	
 	
-	response.sendRedirect("/iTrust/auth/patient/categorizeFoodDiary.jsp");
+	session.setAttribute("start", rangeDateStart);
+	session.setAttribute("end", rangeDateEnd);
+	response.sendRedirect("/iTrust/auth/patient/viewFoodDiaryPat.jsp");
 
 %>
 

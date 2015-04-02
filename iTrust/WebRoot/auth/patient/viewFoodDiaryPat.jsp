@@ -39,6 +39,7 @@ List<FoodDiaryBean> dailyTotal = new ArrayList<FoodDiaryBean>();
 
 FoodDiaryAction action = new FoodDiaryAction(prodDAO, loggedInMID);
 List<FoodDiaryBean> eatlist = action.getFoodDiary();
+List<FoodDiaryBean> newlist = new ArrayList<FoodDiaryBean>();
 
 DietSuggestionAction suggestionAction = new DietSuggestionAction(prodDAO, loggedInMID);
 List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion();
@@ -53,7 +54,24 @@ if(session.getAttribute("err1") != null){
 	session.setAttribute("err1", null);
 }
 
+String single = (String)session.getAttribute("single");
+String start = (String)session.getAttribute("start");
+String end = (String)session.getAttribute("end");
 
+System.out.println(single);
+System.out.println(start);
+System.out.println(end);
+
+//Already validated so safe assumption
+if(single !=null){
+	for (int p = 0; p < eatlist.size(); p++) {
+		if(eatlist.get(p).getEntryDate().equals(single)){
+			newlist.add(eatlist.get(p));
+			System.out.println("hit");
+		}
+	}
+	eatlist = newlist;
+}
 
 %>
 </div>
