@@ -229,9 +229,7 @@ for(FoodDiaryBean superDate: eatlist) {
     </td>            <td style="text-align: center; min-width: 8em">
             <%= StringEscapeUtils.escapeHtml(Double.toString(dProt)) %>
     </td>      
-    <td>
-			<%  // Include a Nutritionist's Suggestions  %>
-    </td>     
+   
 	
     <%
     	if(suggestionList.size() == 0) {
@@ -249,7 +247,7 @@ for(FoodDiaryBean superDate: eatlist) {
     	}
     	else {
     		%> 
-			<td style="text-align: center; min-width: 8em; color:green">
+			<td style="text-align: center; min-width: 8em;">
             <%= StringEscapeUtils.escapeHtml(dsbn.getSuggestion()) %> </td>		
 			
 			<%
