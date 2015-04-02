@@ -439,7 +439,9 @@ public enum TransactionType {
 	VIEW_SUGGESTION(7301, "View Diet Suggestion", "View Diet Suggestion", true),
 	/**BODY_MEASUREMENTS_INTERACTIONS**/
 	ADD_BODY_MEASUREMENTS(7400, "Add Body Measurements", "Add Body Measurements", true),
-	VIEW_BODY_MEASUREMENTS(7401, "View Body Measurements", "View Body Measurements", true);
+	VIEW_BODY_MEASUREMENTS(7401, "View Body Measurements", "View Body Measurements", true),
+	/**CATEGORIZE_FOOD_DAIRES**/
+	CATEGORIZE_FOOD_DIARY(7100, "View Food Diaries by date", "View Food Diaries by date", true),;
 	/**
 	 * This string is used in the SQL statement associated with pulling events for
 	 * display in a patient's Access Log

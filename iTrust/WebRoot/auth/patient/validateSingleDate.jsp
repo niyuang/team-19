@@ -31,6 +31,7 @@
 		return;
 	}
 	
+	loggingAction.logEvent(TransactionType.CATEGORIZE_FOOD_DIARY, loggedInMID.longValue(), loggedInMID.longValue() , "Patient views their food diary by date");
 	session.setAttribute("single", singleDate);
 	response.sendRedirect("/iTrust/auth/patient/viewFoodDiaryPat.jsp");
 

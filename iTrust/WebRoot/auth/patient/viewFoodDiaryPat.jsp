@@ -30,6 +30,12 @@
 
 <%@include file="/header.jsp"%>
 
+<form action="categorizeFoodDiary.jsp">
+ <input type="submit" value="Reselect Dates"/>  
+</form>
+
+<br>
+
 <div style="color: red;">
 
 <%

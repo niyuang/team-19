@@ -13,15 +13,19 @@
 
 <%@include file="/global.jsp"%>
 
+<%
+pageTitle = "iTrust - Categorize Food Diary";
+%>
+
+
 <%@include file="/header.jsp"%>
+
 <div align=center>
 	<h2>Categorize Food Diary Entries</h2>
 </div>
 
 <%
-    pageTitle = "iTrust - Categorize Food Diary";
-
-
+    
 	//Clears the session vars that hold the date
 
 	if(session.getAttribute("single") != null){
@@ -50,8 +54,8 @@
 <h4>Single Date</h4>
 <table>
 <tr>
-<td><span class="font1">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="singleDate">
-<input type="submit" value="Filter"></td>
+<td><span class="font1">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="singleDate"></td>
+<td><input type="submit" value="Filter"></td>
 </tr>
 </table>
 </form>
@@ -63,9 +67,9 @@
 <h4>Range of Dates</h4>
 <table>
 <tr>
-<td><span class="font1">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="rangeDateStart">
-<span class="font1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="rangeDateEnd">
-<input type="submit" value="Filter"></td>
+<td><span class="font1">Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="rangeDateStart"></td>
+<td><span class="font1">End&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" name="rangeDateEnd"></td>
+<td><input type="submit" value="Filter"></td>
 </tr>
 </table>
 </form>
