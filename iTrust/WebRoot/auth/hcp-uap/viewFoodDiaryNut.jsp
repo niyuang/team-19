@@ -23,6 +23,7 @@
 <%@page import="java.util.List"%>
 <%@ page import="java.io.BufferedReader" %>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Date"%>  
 
 <%@page import="edu.ncsu.csc.itrust.action.ViewHealthRecordsHistoryAction"%>
 <%@page import="edu.ncsu.csc.itrust.beans.HealthRecord"%>
@@ -38,34 +39,58 @@ pageTitle = "iTrust - View Patient Food Diary";
 %>
 
 <%@include file="/header.jsp" %>
+
+<form action="categorizeFoodDiary.jsp">
+ <input type="submit" value="Reselect Dates"/>  
+</form>
+
+<br>
 <itrust:patientNav thisTitle="Patient Food Diary" />
 
 <%
-// Require a Patient ID first
+
+
 String pidString = (String)session.getAttribute("pid");
-if (pidString == null || 1 > pidString.length()) {
-	response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/viewFoodDiaryNut.jsp");
-   	return;
-}
-
-//REDIRECT CODE FOR UNSPECIALIZED HCP's
-PersonnelDAO alpha = new PersonnelDAO(prodDAO);
-PersonnelBean beta= alpha.getPersonnel(loggedInMID.longValue());
-String charlie = beta.getSpecialty();
-
-
-	if(!charlie.equalsIgnoreCase("nutritionist")){
-		response.sendRedirect("/iTrust/auth/hcp/home.jsp");
-	}
-
-
 long pidLong = Long.parseLong(pidString);
 
 FoodDiaryAction action = new FoodDiaryAction(prodDAO, pidLong);
 List<FoodDiaryBean> eatlist = action.getFoodDiary();
 
 DietSuggestionAction suggestionAction = new DietSuggestionAction(prodDAO, pidLong);
-List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion(); 
+List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion();
+List<FoodDiaryBean> newlist = new ArrayList<FoodDiaryBean>();
+
+SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+//Used for Filtering
+String single = (String)session.getAttribute("single");
+String start = (String)session.getAttribute("start");
+String end = (String)session.getAttribute("end");
+
+//Already validated so safe assumption
+if(single !=null){
+	for (int p = 0; p < eatlist.size(); p++) {
+		if(eatlist.get(p).getEntryDate().equals(single)){
+			newlist.add(eatlist.get(p));
+		}
+	}
+	eatlist = newlist; //set single date formatted list
+}else if( start !=null && end != null ){
+	Date s = dateFormat.parse(start);
+	Date e = dateFormat.parse(end);
+	for (int n = 0; n < eatlist.size(); n++) {
+	String  c = eatlist.get(n).getEntryDate(); //the current interative date
+	Date current = dateFormat.parse(c); //Change the string date to a date formatted thing
+		if(current.before(s)){
+			continue;
+		}else if(current.after(e)){
+			continue;
+		}else{
+			newlist.add(eatlist.get(n));
+		}
+	}
+	eatlist = newlist; //set range date formatted list
+}
 
 
 String successString = (String)session.getAttribute("success");
@@ -123,7 +148,6 @@ if(sub.equals("yes")){
 	
 }
 
-SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 loggingAction.logEvent(TransactionType.VIEW_FOOD_DIARY, loggedInMID.longValue(), pidLong , "Nutritionist views patient food diary");
 loggingAction.logEvent(TransactionType.ADD_SUGGESTION, loggedInMID.longValue(), pidLong , "Nutritionist adds a suggestion to patient's food diary entry");

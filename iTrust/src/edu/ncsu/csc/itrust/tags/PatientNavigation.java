@@ -18,7 +18,7 @@ public class PatientNavigation implements Tag {
 	private String pageTitles[] = { "Health Records", "Basic Health History", "Demographics",
 			"Document Office Visit", "Risk Factors", "Prescriptions", "Food Diary", "Body Measurements"};
 	private String pageURLs[] = { "editPHR.jsp", "viewBasicHealth.jsp", "editPatient.jsp",
-			"documentOfficeVisit.jsp", "chronicDiseaseRisks.jsp", "getPrescriptionReport.jsp", "viewFoodDiaryNut.jsp", "viewBodyMeasurementNut.jsp"};
+			"documentOfficeVisit.jsp", "chronicDiseaseRisks.jsp", "getPrescriptionReport.jsp", "categorizeFoodDiary.jsp", "viewBodyMeasurementNut.jsp"};
 	private String thisTitle;
 
 	/**

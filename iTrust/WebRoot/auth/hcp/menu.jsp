@@ -19,7 +19,7 @@
 			<li><a href="/iTrust/auth/hcp/changeDependency.jsp">Patient Dependency</a>
 			<!--<li><a href="/iTrust/auth/hcp-uap/deactivatePatient.jsp">Deactivate Patient</a>  -->
 			<li><a href="/iTrust/auth/hcp/auditPage.jsp">Audit Patients</a>
-			<li><a href="/iTrust/auth/hcp-uap/viewFoodDiaryNut.jsp">View Food Diary</a>
+			<li><a href="/iTrust/auth/hcp-uap/categorizeFoodDiary.jsp">View Food Diary</a>
 			<li><a href="/iTrust/auth/hcp-uap/viewBodyMeasurementNut.jsp">View Body Measurements</a>
 		</ul>
 	</div>
