@@ -12,8 +12,9 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@ page import="java.io.BufferedReader" %>
+<%@page import="java.io.BufferedReader" %>
 <%@page import="java.text.DecimalFormat"%>  
+<%@page import="java.util.Date"%>  
 
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
@@ -58,19 +59,29 @@ String single = (String)session.getAttribute("single");
 String start = (String)session.getAttribute("start");
 String end = (String)session.getAttribute("end");
 
-System.out.println(single);
-System.out.println(start);
-System.out.println(end);
-
 //Already validated so safe assumption
 if(single !=null){
 	for (int p = 0; p < eatlist.size(); p++) {
 		if(eatlist.get(p).getEntryDate().equals(single)){
 			newlist.add(eatlist.get(p));
-			System.out.println("hit");
 		}
 	}
-	eatlist = newlist;
+	eatlist = newlist; //set single date formatted list
+}else if( start !=null && end != null ){
+	Date s = dateFormat.parse(start);
+	Date e = dateFormat.parse(end);
+	for (int n = 0; n < eatlist.size(); n++) {
+	String  c = eatlist.get(n).getEntryDate(); //the current interative date
+	Date current = dateFormat.parse(c); //Change the string date to a date formatted thing
+		if(current.before(s)){
+			continue;
+		}else if(current.after(e)){
+			continue;
+		}else{
+			newlist.add(eatlist.get(n));
+		}
+	}
+	eatlist = newlist; //set range date formatted list
 }
 
 %>

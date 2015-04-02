@@ -17,17 +17,18 @@
 <% 
 	String singleDate = request.getParameter("singleDate");
 
-	System.out.println("what was received " + singleDate);
-
 	DateCheck checker = new DateCheck();
 	boolean status = false; 
 	
 	status = checker.checkSingle(singleDate);
 	
 	if(status == true){
-		System.out.println("correct date format");
 	}else if(status == false){
-		System.out.println("bad date format");
+		//set session
+		session.setAttribute("singleDateError", "Date: [Incorrect Fomat must be (MM/DD/YYYY) and Non-Future Time]");
+		//redirect to cat page
+		response.sendRedirect("/iTrust/auth/patient/categorizeFoodDiary.jsp");
+		return;
 	}
 	
 	session.setAttribute("single", singleDate);

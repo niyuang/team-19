@@ -17,13 +17,11 @@ import edu.ncsu.csc.itrust.exception.FormValidationException;
 public class DateCheck {
 	
 	public boolean checkSingle(String start){
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         Date testDate = null;
         try {
             testDate = sdf.parse(start);
-        }
-        catch (ParseException e) {
+        }catch (ParseException e) {
         	return false;
         }
         if (!sdf.format(testDate).equals(start)) {

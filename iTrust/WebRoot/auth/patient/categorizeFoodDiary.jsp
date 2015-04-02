@@ -13,14 +13,35 @@
 
 <%@include file="/global.jsp"%>
 
-<%
-    pageTitle = "iTrust - Categorize Food Diary";
-%>
-
 <%@include file="/header.jsp"%>
 <div align=center>
 	<h2>Categorize Food Diary Entries</h2>
 </div>
+
+<%
+    pageTitle = "iTrust - Categorize Food Diary";
+
+
+	//Clears the session vars that hold the date
+
+	if(session.getAttribute("single") != null){
+	session.setAttribute("single", null);
+	}
+	if(session.getAttribute("start") != null){
+		session.setAttribute("start", null);
+	}
+	if(session.getAttribute("end") != null){
+		session.setAttribute("end", null);
+	}
+	//Error Handling Session Variables
+	if(session.getAttribute("singleDateError") != null){
+		out.println("<div align=center> <span style=\"color:red\"  class=\"font_success\">" + session.getAttribute("singleDateError")+ "<br>" + "</span></div>");
+	session.setAttribute("singleDateError", null);
+	}
+
+%>
+
+
 
 <br>
 <br>

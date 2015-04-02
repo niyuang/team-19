@@ -21,15 +21,17 @@
 	System.out.println("received DS: " + rangeDateStart);
 	System.out.println("received DE: " + rangeDateEnd);
 	
+	//Check here to sure on is not greater than other
+	
 	DateCheck checker = new DateCheck();
 	boolean status = false; 
 	
 	status = checker.checkRange(rangeDateStart, rangeDateEnd);
 	
 	if(status == true){
-		System.out.println("correct date format");
 	}else if(status == false){
-		System.out.println("bad date format");
+		//set session var
+		//redirect
 	}
 	
 	
