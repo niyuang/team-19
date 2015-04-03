@@ -478,7 +478,7 @@ public class TelemonitoringUseCaseTest extends iTrustSeleniumTest {
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 		
 		java.util.Date date = new java.util.Date();
-		date.setTime(date.getTime() - 3*ONE_DAY);
+		date.setTime(date.getTime() - 3*(long)ONE_DAY);
 		Date yesterday = new Date();
 		yesterday.setTime(yesterday.getTime() - ONE_DAY);
 		Date twoDaysAgo = new Date(yesterday.getTime() - ONE_DAY);
