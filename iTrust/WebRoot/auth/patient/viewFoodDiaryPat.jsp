@@ -12,9 +12,8 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="java.io.BufferedReader" %>
+<%@ page import="java.io.BufferedReader" %>
 <%@page import="java.text.DecimalFormat"%>  
-<%@page import="java.util.Date"%>  
 
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
@@ -30,12 +29,6 @@
 
 <%@include file="/header.jsp"%>
 
-<form action="categorizeFoodDiary.jsp">
- <input type="submit" value="Reselect Dates"/>  
-</form>
-
-<br>
-
 <div style="color: red;">
 
 <%
@@ -46,7 +39,6 @@ List<FoodDiaryBean> dailyTotal = new ArrayList<FoodDiaryBean>();
 
 FoodDiaryAction action = new FoodDiaryAction(prodDAO, loggedInMID);
 List<FoodDiaryBean> eatlist = action.getFoodDiary();
-List<FoodDiaryBean> newlist = new ArrayList<FoodDiaryBean>();
 
 DietSuggestionAction suggestionAction = new DietSuggestionAction(prodDAO, loggedInMID);
 List<DietSuggestionBean> suggestionList = suggestionAction.getSuggestion();
@@ -59,35 +51,6 @@ loggingAction.logEvent(TransactionType.VIEW_SUGGESTION, loggedInMID.longValue(),
 if(session.getAttribute("err1") != null){
 	out.println("<span class=\"myspan\">" + session.getAttribute("err1")+ "<br>" + "</span>");
 	session.setAttribute("err1", null);
-}
-
-String single = (String)session.getAttribute("single");
-String start = (String)session.getAttribute("start");
-String end = (String)session.getAttribute("end");
-
-//Already validated so safe assumption
-if(single !=null){
-	for (int p = 0; p < eatlist.size(); p++) {
-		if(eatlist.get(p).getEntryDate().equals(single)){
-			newlist.add(eatlist.get(p));
-		}
-	}
-	eatlist = newlist; //set single date formatted list
-}else if( start !=null && end != null ){
-	Date s = dateFormat.parse(start);
-	Date e = dateFormat.parse(end);
-	for (int n = 0; n < eatlist.size(); n++) {
-	String  c = eatlist.get(n).getEntryDate(); //the current interative date
-	Date current = dateFormat.parse(c); //Change the string date to a date formatted thing
-		if(current.before(s)){
-			continue;
-		}else if(current.after(e)){
-			continue;
-		}else{
-			newlist.add(eatlist.get(n));
-		}
-	}
-	eatlist = newlist; //set range date formatted list
 }
 
 %>
@@ -266,7 +229,9 @@ for(FoodDiaryBean superDate: eatlist) {
     </td>            <td style="text-align: center; min-width: 8em">
             <%= StringEscapeUtils.escapeHtml(Double.toString(dProt)) %>
     </td>      
-   
+    <td>
+			<%  // Include a Nutritionist's Suggestions  %>
+    </td>     
 	
     <%
     	if(suggestionList.size() == 0) {
@@ -284,7 +249,7 @@ for(FoodDiaryBean superDate: eatlist) {
     	}
     	else {
     		%> 
-			<td style="text-align: center; min-width: 8em;">
+			<td style="text-align: center; min-width: 8em; color:green">
             <%= StringEscapeUtils.escapeHtml(dsbn.getSuggestion()) %> </td>		
 			
 			<%
@@ -479,6 +444,16 @@ for(FoodDiaryBean superDate: eatlist) {
 		        var chart = new google.visualization.PieChart(document.getElementById('chart_div_2'));
 		        chart.draw(data, options);
 		      }
+		      	
+		      // For testing in selenium
+		      // calculate the graphic percetage of carb in JAVASCRIPT
+				function returnCarbPercentage(){
+		    	  	var carb = <%= fdb.getCarbs()%> ;
+		    	  	var total = <%= fdb.getCarbs()%> + <%= fdb.getSugar()%> + <%= fdb.getProtein()%>
+		    	  				+ <%= fdb.getFat()%>;
+		    	  	var result = Math.round((carb/total)*1000)/1000
+					return result ;
+				}
 		    </script>
 		  </head>
 			<%
@@ -516,6 +491,7 @@ for(FoodDiaryBean superDate: eatlist) {
 			
 			// <-------------------------- Chart part -------------------------->
 			// Assign ID to each tr in table so Javascript can capture them to draw diagram
+			// Nutrient Source: http://www.mayoclinic.org/healthy-living/nutrition-and-healthy-eating/in-depth/how-to-eat-healthy/art-20046590?pg=2
 			// Draw graph 1 and 2
 			%>
 			<table aligen = "center">
@@ -528,31 +504,69 @@ for(FoodDiaryBean superDate: eatlist) {
 							<tr class="BMR">
 								<td id ="BMRName">BMR(Daily Calories needed):</td>
 								<td id ="BMRValue">
-									<%= BMR %>
+									<%= BMR + StringEscapeUtils.escapeHtml(" grams") %>
 								</td>
 							</tr>
 							<tr class="Carb">
 								<td id ="CarbName">Carb needed(approximately 60% of BMR):</td>
 								<td id ="CarbValue">
-									<%= recmdCarb %>
+									<%= recmdCarb + StringEscapeUtils.escapeHtml(" grams") %>
 								</td>
 							</tr>
 							<tr class="Sugar">
 								<td id ="SugarName">Sugar needed(approximately 10% of BMR):</td>
 								<td id ="SuagrValue">
-									<%=  recmdSugar %>
+									<%=  recmdSugar + StringEscapeUtils.escapeHtml(" grams") %>
 								</td>
 							</tr>
 							<tr class="Protein">
 								<td id ="ProteinName">Protein needed(approximately 22.5% of BMR):</td>
 								<td id ="ProteinValue">
-									<%= recmdProtein %>
+									<%= recmdProtein + StringEscapeUtils.escapeHtml(" grams")%>
 								</td>
 							</tr>
 							<tr class="Fat">
 								<td id ="FatName">Fat needed(approximately 7.5% of BMR):</td>
 								<td id ="FatValue">
-									<%= recmdFat %>
+									<%= recmdFat + StringEscapeUtils.escapeHtml(" grams")%>
+								</td>
+							</tr>
+							<tr class="Sodium">
+								<td id ="SodiumName">Sodium needed(Not include in BMR):</td>
+								<%
+									if(pb.getAge() > 51) {
+										%> 
+											<td id ="SodiumValue">
+												<%= StringEscapeUtils.escapeHtml("1,500 milligrams") %>
+											</td>
+										<%
+									} else {
+										%> 
+											<td id ="SodiumValue">
+												<%= StringEscapeUtils.escapeHtml("2,300 milligrams") %>
+											</td>
+										<%
+									}
+								%>
+
+							</tr>
+							<tr class="Fiber">
+								<td id ="FiberName">Fiber needed(Not include in BMR):</td>
+								<%
+									if(pb.getGender().equals("Female")) {
+										%> 
+											<td id ="FiberValue">
+												<%= StringEscapeUtils.escapeHtml("22 to 28 grams") %>
+											</td>
+										<%
+									} else {
+										%> 
+											<td id ="FiberValue">
+												<%= StringEscapeUtils.escapeHtml("28 to 34 grams") %>
+											</td>
+										<%
+									}
+								%>
 								</td>
 							</tr>
 						</tbody>
