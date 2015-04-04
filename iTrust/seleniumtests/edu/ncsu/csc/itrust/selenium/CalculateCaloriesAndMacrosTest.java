@@ -1,10 +1,6 @@
 package edu.ncsu.csc.itrust.selenium;
 
-import java.util.List;
-
-import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -24,10 +20,11 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 	}
 
 	/**
-	 * testViewEmptySuggestion
-	 * HCP Spencer Reid logs into iTrust
-	 * view food diary of Jennifer Jareau
-	 * @throws Exception
+	 * testCalculateCaloriesAndMacrosWithDefualtWeightAndHeight () 
+	 * Patient Baby Programmer(MID: 5)logs into iTrust.
+	 * Patient Baby Programmer(MID: 5) clicks View Food Diary
+	 * In "Categorize Food Diary Entries", Patient Baby Programmer(MID: 5) enters 12/02/1993 as start date and 12/02/2014 as end date.
+	 * Patient Jennifer Jareau clicks the "Calculate My Recommanded Calories" button
 	 */
 	public void testCalculateCaloriesAndMacrosWithDefualtWeightAndHeight () throws Exception {
 		// log in as patient Baby Programmer 
@@ -71,6 +68,21 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 		
 	}
 	
+	/**
+	 * testCalculateCaloriesAndMacrosWithNoDefualtWeightAndHeight()
+	 * Patient Fozzie Bear(MID: 22)logs into iTrust.
+	 * Patient Fozzie Bear(MID: 22) clicks View Food Diary
+	 * In "Categorize Food Diary Entries", Patient Fozzie Bear(MID: 22) enters 12/02/1993 as start date and 12/02/2014 as end date.
+	 * Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button
+	 * Patient Fozzie Bear(MID: 22) types in 70.0 as most recent height
+	 * Patient Fozzie Bear(MID: 22) types in 190.0 as most recent weight
+	 * Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button
+	 * Patient Fozzie Bear(MID: 22) types in 71.0 as most recent height
+	 * Patient Fozzie Bear(MID: 22) types in 191.0 as most recent weight
+	 * Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button
+	 * 
+	 *  @throws Exception
+	 */	
 	public void testCalculateCaloriesAndMacrosWithNoDefualtWeightAndHeight() throws Exception {
 		// log in as patient Baby Programmer 
 		HtmlUnitDriver driver = (HtmlUnitDriver) login("22", "pw");
@@ -141,6 +153,19 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 		assertEquals("28 to 34 grams", driver.findElement(By.id("FiberValue")).getText());	
 	}
 	
+	/**
+	 * Patient Fozzie Bear(MID: 22)logs into iTrust.
+	 * Patient Fozzie Bear(MID: 22) clicks View Food Diary
+	 * In "Categorize Food Diary Entries", Patient Fozzie Bear(MID: 22) enters 12/02/1993 as start date and 12/02/2014 as end date.
+	 * Patient Fozzie Bear(MID: 22) types in -70.0 as most recent height
+	 * Patient Fozzie Bear(MID: 22) types in 190.0 as most recent weight
+	 * Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button
+	 * Patient Fozzie Bear(MID: 22) types in 70.0123 as most recent height
+	 * Patient Fozzie Bear(MID: 22) types in 190.0 as most recent weight
+	 * Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button
+	 *	
+	 * @throws Exception
+	 */
 	public void testCalculateCaloriesAndMacrosWithInvalidInput() throws Exception {
 		// log in as patient Baby Programmer 
 		HtmlUnitDriver driver = (HtmlUnitDriver) login("22", "pw");
@@ -193,6 +218,19 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 		assertEquals("This form has not been validated correctly. The following field are not properly filled in: [Height: Up to 3-digit number + up to 1 decimal place]", message.getText());	
 	}
 	
+	/**
+	 * testCompareCaloriesAndMacrosWithSeveralFoodEntry()
+	 * Patient Aaron Hotchner(MID: 686) logs into iTrust.
+	 * Patient Aaron Hotchner(MID: 686) clicks View Food Diary
+	 * In "Categorize Food Diary Entries", Patient Aaron Hotchner(MID: 686) enters 12/02/1993 as start date and 12/02/2014 as end date.
+	 * Patient Aaron Hotchner(MID: 686) types in 70.0 as most recent height
+	 * Patient Aaron Hotchner(MID: 686) types in 190.0 as most recent weight
+	 * Patient Aaron Hotchner(MID: 686) Select 04/13/2014 from the dropdown box 
+	 * Patient Aaron Hotchner(MID: 686) clicks the "Calculate My Recommanded Calories" button
+	 * Patient Aaron Hotchner(MID: 686) Select 05/21/2014 from the dropdown box 
+	 * Patient Aaron Hotchner(MID: 686) clicks the "Calculate My Recommanded Calories" button
+	 * @throws Exception
+	 */
 	public void testCompareCaloriesAndMacrosWithSeveralFoodEntry() throws Exception {
 		// log in as patient Baby Programmer 
 		HtmlUnitDriver driver = (HtmlUnitDriver) login("686", "pw");
