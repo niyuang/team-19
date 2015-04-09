@@ -661,7 +661,6 @@ for(FoodDiaryBean superDate: eatlist) {
 		        var chart = new google.visualization.PieChart(document.getElementById('chart_div_1'));
 		        chart.draw(data, options);
 		      }
-		      
 		    </script>
 		    
 		  </head> 

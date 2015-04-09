@@ -252,17 +252,11 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 		submit_button = driver.findElement(By.xpath("//*[@id=\"weightAndHeightForm\"]/div/input"));
 		submit_button.click();
 		
-		//Object val = driver.executeScript("return returnCarbPercentage();");
-		//assertEquals(0.512, (double)val);
-		
 		compareTo = new Select
 				(driver.findElementByXPath("//*[@id=\"weightAndHeightForm\"]/div/table[1]/tbody/tr/td[11]/select"));
 		compareTo.selectByVisibleText("05/21/2013");
 		submit_button = driver.findElement(By.xpath("//*[@id=\"weightAndHeightForm\"]/div/input"));
 		submit_button.click();
-		
-		//val = driver.executeScript("return returnCarbPercentage();");
-		//assertEquals(0.556, (double)val);
 
 	}
 }
