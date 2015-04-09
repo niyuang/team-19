@@ -528,33 +528,72 @@ for(FoodDiaryBean superDate: eatlist) {
 							<tr class="BMR">
 								<td id ="BMRName">BMR(Daily Calories needed):</td>
 								<td id ="BMRValue">
-									<%= BMR %>
+									<%= BMR + StringEscapeUtils.escapeHtml(" grams") %>
 								</td>
 							</tr>
 							<tr class="Carb">
 								<td id ="CarbName">Carb needed(approximately 60% of BMR):</td>
 								<td id ="CarbValue">
-									<%= recmdCarb %>
+									<%= recmdCarb + StringEscapeUtils.escapeHtml(" grams")%>
 								</td>
 							</tr>
 							<tr class="Sugar">
 								<td id ="SugarName">Sugar needed(approximately 10% of BMR):</td>
 								<td id ="SuagrValue">
-									<%=  recmdSugar %>
+									<%=  recmdSugar + StringEscapeUtils.escapeHtml(" grams")%>
 								</td>
 							</tr>
 							<tr class="Protein">
 								<td id ="ProteinName">Protein needed(approximately 22.5% of BMR):</td>
 								<td id ="ProteinValue">
-									<%= recmdProtein %>
+									<%= recmdProtein + StringEscapeUtils.escapeHtml(" grams") %>
 								</td>
 							</tr>
 							<tr class="Fat">
 								<td id ="FatName">Fat needed(approximately 7.5% of BMR):</td>
 								<td id ="FatValue">
-									<%= recmdFat %>
+									<%= recmdFat + StringEscapeUtils.escapeHtml(" grams") %>
 								</td>
 							</tr>
+								
+							<tr class="Sodium">
+								<td id ="SodiumName">Sodium needed(Not include in BMR):</td>
+								<%
+									if(pb.getAge() > 51) {
+										%> 
+											<td id ="SodiumValue">
+												<%= StringEscapeUtils.escapeHtml("1,500 milligrams") %>
+											</td>
+										<%
+									} else {
+										%> 
+											<td id ="SodiumValue">
+												<%= StringEscapeUtils.escapeHtml("2,300 milligrams") %>											</td>
+										<%
+									}
+								%>
+							</tr>
+							
+							<tr class="Fiber">
+								<td id ="FiberName">Fiber needed(Not include in BMR):</td>
+								<%
+									if(pb.getGender().equals("Female")) {
+										%> 
+											<td id ="FiberValue">
+												<%= StringEscapeUtils.escapeHtml("22 to 28 grams") %>
+											</td>
+										<%
+									} else {
+										%> 
+											<td id ="FiberValue">
+												<%= StringEscapeUtils.escapeHtml("28 to 34 grams") %>
+											</td>
+										<%
+									}
+								%>
+									<%= recmdFat %>
+ 								</td>
+ 							</tr>	
 						</tbody>
 					</table>
 				</td>
@@ -622,6 +661,7 @@ for(FoodDiaryBean superDate: eatlist) {
 		        var chart = new google.visualization.PieChart(document.getElementById('chart_div_1'));
 		        chart.draw(data, options);
 		      }
+		      
 		    </script>
 		    
 		  </head> 
