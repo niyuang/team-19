@@ -71,4 +71,19 @@ INSERT INTO patientfooddiary(MID,ldate,meal,food,servings,cals,fat,sodium,carbs,
 VALUES (685,'2012-09-30','Lunch','Mango Passion Fruit Juice', 1.2, 130, 0, 25, 32, 0, 29, 1)
  ON DUPLICATE KEY UPDATE MID = MID;
  
+   /* Some Default Body Measurement stuff to be added as test */
+INSERT INTO patientBodyMeasurements(MID,ldate,weight,height,waist,arms)
+VALUES (685,'2012-09-30',140, 70, 34, 60)
+ ON DUPLICATE KEY UPDATE MID = MID;
+ 
+    /* Some Default Body Measurement stuff to be added as test */
+INSERT INTO patientBodyMeasurements(MID,ldate,weight,height,waist,arms)
+VALUES (685,'2013-09-25',150, 71.4, 36, 61)
+ ON DUPLICATE KEY UPDATE MID = MID;
+ 
+     /* Some Default Body Measurement stuff to be added as test */
+INSERT INTO patientBodyMeasurements(MID,ldate,weight,height,waist,arms)
+VALUES (685,'2014-08-2',135, 75, 33, 61)
+ ON DUPLICATE KEY UPDATE MID = MID;
+ 
  

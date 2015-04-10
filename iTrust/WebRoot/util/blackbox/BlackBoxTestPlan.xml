@@ -17069,4 +17069,165 @@
          "[Servings, Calories, Fat, Sodium, Carbs, Fiber, Sugar, and Protein - Must not be Blank!]" is displayed</eResult>
     </expectedResults>
 </test>
+<test id="testViewEmptyWeightGoalsChart">
+    <role>HCP</role>
+    <usecase>74</usecase>
+    <dateAdded>03/23/2015</dateAdded>
+    <description>
+        <precondition>Random Person and Spencer Reid are registered and authenticated with the iTrust system.</precondition>
+		<step>HCP Spencer Reid logs into iTrust.</step>
+		<step>Spencer Reid clicks on View Body Measurements under Patient info.</step>
+		<step>Search for Random Person and click on the MID.</step>
+		<step>Click on View Chart under Weight.</step>
+	</description>
+    <expectedResults>
+        <eResult>A message is displayed: “No Past Body Measurements Found”.</eResult>
+    </expectedResults>
+</test>
+<test id="testViewWeightGoalsCharts">
+    <role>HCP</role>
+    <usecase>74</usecase>
+    <dateAdded>03/23/2015</dateAdded>
+    <description>
+        <precondition>Jennifer Jareau and Spencer Reid are registered and authenticated with the iTrust system.</precondition>
+		<step>HCP Spencer Reid logs into iTrust.</step>
+		<step>Spencer Reid clicks on View Body Measurements under Patient info.</step>
+		<step>Search for Jennifer Jareau and click on the MID.</step>
+		<step>Click on View Chart under Weight.	</step>
+	</description>
+    <expectedResults>
+        <eResult>A graph showing the patient’s weight history is displayed.</eResult>
+    </expectedResults>
+</test>
+<test id="testViewWeightGoalsChartsAsNonNutritionist">
+    <role>HCP</role>
+    <usecase>74</usecase>
+    <dateAdded>03/23/2015</dateAdded>
+    <description>
+        <precondition>Jennifer Jareau and Kelly Doctor are registered and authenticated with the iTrust system.</precondition>
+		<step>HCP Kelly Doctor logs into iTrust.</step>
+		<step>Kelly Doctor clicks on View Body Measurements under Patient info.</step>
+	</description>
+    <expectedResults>
+        <eResult>The non-nutritionist HCP is redirected to his/her homepage.</eResult>
+    </expectedResults>
+</test>
+	<test id="viewEmptySuggestions">
+		<role>HCP</role>
+		<usecase>73</usecase>
+		<dateAdded>03/28/2015</dateAdded>
+		<description>
+			<preconditon>Jennifer Jareau and Spencer Reid are registered and suthenticated with the iTrust system</preconditon>
+			<step>HCP Soencer Reid logs into iTrust</step>
+			<step>Spencer Reid clicks on View Food Diary under the View tab and search for Jennifer Jareau</step></description>
+		<expectResults>
+			<eResult>An empty text box is present next to the daily totals row</eResult></expectResults></test>
+	<test id="writeSuggestion">
+		<dateAdded>03/28/2015</dateAdded>
+		<role>HCP</role>
+		<usecase>73</usecase>
+		<description>
+			<precondition>HCP Spencer Reid logs into iTrust</precondition>
+			<step>Spencer Reid click on View Food Diary and search for Jennifer Jareau</step>
+			<step>click text box xorresponding to 09/30/2012 and write "Good Job" and save</step></description>
+		<expectedResults>
+			<eResult>text box has "Good Job" in it</eResult></expectedResults></test>
+	<test id="ViewSuggestion">
+		<usecase>73</usecase>
+		<role>Patient</role>
+		<dateAdded>03/28/2015</dateAdded>
+		<description>
+			<preconditon>Jennifer Jareau logs into iTrust</preconditon>
+			<step>clicks on View Food Diary</step></description>
+		<expectedResults>
+			<eResult>"Good Job"next to her total row for 09/30/2012</eResult></expectedResults>
+	</test>
+
+	<test id="testCalculateCaloriesAndMacrosWithDefualtWeightAndHeight">
+	    <role>Patient</role>
+	    <usecase>72</usecase>
+	    <dateAdded>04/03/2015</dateAdded>
+	    <description>
+	        <precondition>Baby Programmer(MID: 5) is registered and authenticated with the iTrust system.</precondition>
+			<step>Patient Baby Programmer(MID: 5)logs into iTrust.</step>
+			<step>Patient Baby Programmer(MID: 5) clicks View Food Diary</step>
+			<step>In "Categorize Food Diary Entries", Patient Baby Programmer(MID: 5) enters 12/02/1993 as start date and 12/02/2014 as end date.</step>
+			<step>Patient Jennifer Jareau clicks the "Calculate My Recommanded Calories" button</step>
+		</description>
+	    <expectedResults>
+	        <eResult>A chart containing recommended information should show up on the page</eResult>
+	        <eResult>No data found should be prompted because no food entry is found within this patient's record</eResult>
+	        <eResult>BMR: 1944.8; Carb: 1166.9; Sugar: 194.5; Protein: 437.6 Fat:145.9</eResult>
+	    </expectedResults>
+	</test>
+	
+	<test id="testCalculateCaloriesAndMacrosWithNoDefualtWeightAndHeight">
+	    <role>Patient</role>
+	    <usecase>72</usecase>
+	    <dateAdded>04/03/2015</dateAdded>
+	    <description>
+	        <precondition>Fozzie Bear(MID: 22) is registered and authenticated with the iTrust system.</precondition>
+			<step>Patient Fozzie Bear(MID: 22)logs into iTrust.</step>
+			<step>Patient Fozzie Bear(MID: 22) clicks View Food Diary</step>
+			<step>In "Categorize Food Diary Entries", Patient Fozzie Bear(MID: 22) enters 12/02/1993 as start date and 12/02/2014 as end date.</step>
+			<step>Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 70.0 as most recent height</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 190.0 as most recent weight</step>
+			<step>Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 71.0 as most recent height</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 191.0 as most recent weight</step>
+			<step>Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button</step>
+		</description>
+	    <expectedResults>
+	        <eResult>A chart containing recommended information should show up on the page</eResult>
+	        <eResult>No data found should be prompted because no food entry is found within this patient's record</eResult>
+	        <eResult>BMR: 1880.3; Carb: 1128.2; Sugar: 188.0; Protein: 423.1 Fat:141.0</eResult> 
+	        <eResult>The chart should be updated after user changes input</eResult>
+	        <eResult>BMR: 1899.2 ; Carb: 1139.5; Sugar: 189.9; Protein: 427.3 Fat:142.4</eResult>   
+	    </expectedResults>
+	</test>
+	
+	<test id="testCalculateCaloriesAndMacrosWithInvalidInput">
+	    <role>Patient</role>
+	    <usecase>72</usecase>
+	    <dateAdded>04/03/2015</dateAdded>
+	    <description>
+	        <precondition>Fozzie Bear(MID: 22) is registered and authenticated with the iTrust system.</precondition>
+			<step>Patient Fozzie Bear(MID: 22)logs into iTrust.</step>
+			<step>Patient Fozzie Bear(MID: 22) clicks View Food Diary</step>
+			<step>In "Categorize Food Diary Entries", Patient Fozzie Bear(MID: 22) enters 12/02/1993 as start date and 12/02/2014 as end date.</step>
+			<step>Patient Fozzie Bear(MID: 22) types in -70.0 as most recent height</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 190.0 as most recent weight</step>
+			<step>Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 70.0123 as most recent height</step>
+			<step>Patient Fozzie Bear(MID: 22) types in 190.0 as most recent weight</step>
+			<step>Patient Fozzie Bear(MID: 22)clicks the "Calculate My Recommanded Calories" button</step>
+		</description>
+	    <expectedResults>
+	        <eResult>No chart should be generated, and a message would be thrown. </eResult>
+	    </expectedResults>
+	</test>
+	
+	<test id="testCompareCaloriesAndMacrosWithSeveralFoodEntry">
+	    <role>Patient</role>
+	    <usecase>72</usecase>
+	    <dateAdded>04/03/2015</dateAdded>
+	    <description>
+	        <precondition>Aaron Hotchner(MID: 686) is registered and authenticated with the iTrust system.</precondition>
+			<step>Patient Aaron Hotchner(MID: 686) logs into iTrust.</step>
+			<step>Patient Aaron Hotchner(MID: 686) clicks View Food Diary</step>
+			<step>In "Categorize Food Diary Entries", Patient Aaron Hotchner(MID: 686) enters 12/02/1993 as start date and 12/02/2014 as end date.</step>
+			<step>Patient Aaron Hotchner(MID: 686) types in 70.0 as most recent height</step>
+			<step>Patient Aaron Hotchner(MID: 686) types in 190.0 as most recent weight</step>
+			<step>Patient Aaron Hotchner(MID: 686) Select 04/13/2014 from the dropdown box </step>
+			<step>Patient Aaron Hotchner(MID: 686) clicks the "Calculate My Recommanded Calories" button</step>
+			<step>Patient Aaron Hotchner(MID: 686) Select 05/21/2014 from the dropdown box </step>
+			<step>Patient Aaron Hotchner(MID: 686) clicks the "Calculate My Recommanded Calories" button</step>
+		</description>
+	    <expectedResults>
+	        <eResult>A percentage graph should be generated on the right side with 51.2% Carb, 31.7% Sugar, and 17.1% fat. </eResult>
+	    	<eResult>A percentage graph should be updated with 55.6% Carb, 22.2% Sugar, and 22.2% fat. </eResult>
+	    </expectedResults>
+	</test>
+	
 </BlackBoxTestPlan>

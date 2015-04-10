@@ -433,7 +433,15 @@ public enum TransactionType {
 	VIEW_FOOD_DIARY(6801, "View Food Diary", "View Food Diary", true),
 	ADD_FOOD_DIARY(6802, "Create Food Diary Entry", "Create Food Diary Entry", true),
 	EDIT_FOOD_DIARY(7000, "Edit Food Diary Entry", "Edit Food Diary Entry", true),
-	DELETE_FOOD_DIARY(7001, "Delete Food Diary", "Add to Food Diary", true);
+	DELETE_FOOD_DIARY(7001, "Delete Food Diary", "Delete Food Diary", true),
+	/** DIET_SUGGESTIONS */
+	ADD_SUGGESTION(7300, "Add Diet Suggestion", "Add Diet Suggestion", true),
+	VIEW_SUGGESTION(7301, "View Diet Suggestion", "View Diet Suggestion", true),
+	/**BODY_MEASUREMENTS_INTERACTIONS**/
+	ADD_BODY_MEASUREMENTS(7400, "Add Body Measurements", "Add Body Measurements", true),
+	VIEW_BODY_MEASUREMENTS(7401, "View Body Measurements", "View Body Measurements", true),
+	/**CATEGORIZE_FOOD_DAIRES**/
+	CATEGORIZE_FOOD_DIARY(7100, "View Food Diaries by date", "View Food Diaries by date", true),;
 	/**
 	 * This string is used in the SQL statement associated with pulling events for
 	 * display in a patient's Access Log

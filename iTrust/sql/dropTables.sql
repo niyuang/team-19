@@ -26,6 +26,10 @@ DROP TABLE IF EXISTS appointmenttype;
 /* Food Diary Table Added 2/8/15 */
 DROP TABLE IF EXISTS patientfooddiary;
 
+/* Body Measurements Drop Added 3/22/15*/
+DROP TABLE IF EXISTS patientBodyMeasurements;
+DROP TABLE IF EXISTS dietSuggestion;
+
 DROP TABLE IF EXISTS reportrequests;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS representatives;

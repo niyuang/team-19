@@ -6,6 +6,7 @@
 		<ul class="nav nav-sidebar">
 			<li><a href="/iTrust/auth/patient/editMyDemographics.jsp">My Demographics</a>
 			<li><a href="/iTrust/auth/patient/addFoodDiaryPat.jsp">Add Food Diary</a>
+			<li><a href="/iTrust/auth/patient/addBodyMeasurement.jsp">Add Body Measurements</a>
 		</ul>
 	</div>
 </div>
@@ -27,7 +28,8 @@
 			<li><a href="/iTrust/auth/patient/viewPatientReferrals.jsp">My Referrals</a>
 			<li><a href="/iTrust/auth/patient/findExpert.jsp">Find an Expert</a>
 			<li><a href="/iTrust/auth/patient/myBills.jsp">My Bills</a>
-			<li><a href="/iTrust/auth/patient/viewFoodDiaryPat.jsp">View Food Diary</a>
+			<li><a href="/iTrust/auth/patient/categorizeFoodDiary.jsp">View Food Diary</a>
+			<li><a href="/iTrust/auth/patient/viewBodyMeasurement.jsp">View Body Measurements</a>
 		</ul>
 	</div>
 </div>

@@ -688,4 +688,22 @@ CREATE TABLE patientfooddiary(
 	fiber		DOUBLE NOT NULL default '0',  
 	sugar		DOUBLE NOT NULL default '0', 
 	protein		DOUBLE NOT NULL default '0'
+) ENGINE=MyISAM;
+
+/* added 3/20/15 */
+CREATE TABLE dietSuggestion(
+	MID			BIGINT unsigned,
+	ldate		DATE NOT NULL,
+	suggestion 	VARCHAR(200) DEFAULT '',
+	PRIMARY KEY (ldate, MID)
 ) ENGINE=MyISAM; 
+
+/* added 3/20/15 */
+CREATE TABLE patientBodyMeasurements(
+	MID			BIGINT unsigned,
+	ldate		DATE NOT NULL,
+	weight		DOUBLE NOT NULL default '0', 
+	height		DOUBLE NOT NULL default '0', 
+	waist		DOUBLE NOT NULL default '0', 
+	arms		DOUBLE NOT NULL default '0'
+) ENGINE=MyISAM;
