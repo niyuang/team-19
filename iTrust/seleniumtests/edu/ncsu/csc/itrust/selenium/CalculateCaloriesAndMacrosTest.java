@@ -116,11 +116,11 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 		
 		
 		// Since Id has been assigned for each value in table, directly call By.id
-		assertEquals("1880.3 grams", driver.findElement(By.id("BMRValue")).getText());
-		assertEquals("1128.2 grams", driver.findElement(By.id("CarbValue")).getText());
-		assertEquals("188.0 grams", driver.findElement(By.id("SuagrValue")).getText());
-		assertEquals("423.1 grams", driver.findElement(By.id("ProteinValue")).getText());
-		assertEquals("141.0 grams", driver.findElement(By.id("FatValue")).getText());
+		assertEquals("1873.5 grams", driver.findElement(By.id("BMRValue")).getText());
+		assertEquals("1124.1 grams", driver.findElement(By.id("CarbValue")).getText());
+		assertEquals("187.4 grams", driver.findElement(By.id("SuagrValue")).getText());
+		assertEquals("421.5 grams", driver.findElement(By.id("ProteinValue")).getText());
+		assertEquals("140.5 grams", driver.findElement(By.id("FatValue")).getText());
 		assertEquals("2,300 milligrams", driver.findElement(By.id("SodiumValue")).getText());
 		assertEquals("28 to 34 grams", driver.findElement(By.id("FiberValue")).getText());
 		
@@ -138,11 +138,11 @@ public class CalculateCaloriesAndMacrosTest extends iTrustSeleniumTest {
 		assertEquals("No data found on my record", DailyGraph.getText());
 		
 		// Since Id has been assigned for each value in table, directly call By.id
-		assertEquals("1899.2 grams", driver.findElement(By.id("BMRValue")).getText());
-		assertEquals("1139.5 grams", driver.findElement(By.id("CarbValue")).getText());
-		assertEquals("189.9 grams", driver.findElement(By.id("SuagrValue")).getText());
-		assertEquals("427.3 grams", driver.findElement(By.id("ProteinValue")).getText());
-		assertEquals("142.4 grams", driver.findElement(By.id("FatValue")).getText());
+		assertEquals("1892.4 grams", driver.findElement(By.id("BMRValue")).getText());
+		assertEquals("1135.4 grams", driver.findElement(By.id("CarbValue")).getText());
+		assertEquals("189.2 grams", driver.findElement(By.id("SuagrValue")).getText());
+		assertEquals("425.8 grams", driver.findElement(By.id("ProteinValue")).getText());
+		assertEquals("141.9 grams", driver.findElement(By.id("FatValue")).getText());
 		assertEquals("2,300 milligrams", driver.findElement(By.id("SodiumValue")).getText());
 		assertEquals("28 to 34 grams", driver.findElement(By.id("FiberValue")).getText());	
 	}
