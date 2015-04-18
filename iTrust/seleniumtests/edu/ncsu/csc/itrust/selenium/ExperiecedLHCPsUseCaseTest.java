@@ -13,7 +13,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.junit.Test;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
-import edu.ncsu.csc.itrust.http.iTrustHTTPTest;
 
 public class ExperiecedLHCPsUseCaseTest extends iTrustSeleniumTest {
 	private WebDriver driver;

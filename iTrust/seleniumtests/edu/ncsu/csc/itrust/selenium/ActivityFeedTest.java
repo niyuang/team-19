@@ -13,8 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.meterware.httpunit.WebForm;
 
-import edu.ncsu.csc.itrust.http.LoginTest;
-
 public class ActivityFeedTest extends iTrustSeleniumTest {
 	private WebDriver driver = null;
 	

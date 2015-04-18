@@ -17,7 +17,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.junit.Test;
 
 import edu.ncsu.csc.itrust.enums.TransactionType;
-import edu.ncsu.csc.itrust.http.iTrustHTTPTest;
 
 public class EditLOINCDataTest extends iTrustSeleniumTest {
 	private String baseUrl;
