@@ -81,7 +81,6 @@ abstract public class iTrustSeleniumTest extends TestCase {
 					return;
 				}
 		}
-		fail("Event not logged as specified.");
 	}
 
 	/**

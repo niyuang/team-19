@@ -17229,5 +17229,49 @@
 	    	<eResult>A percentage graph should be updated with 55.6% Carb, 22.2% Sugar, and 22.2% fat. </eResult>
 	    </expectedResults>
 	</test>
-	
+	<test id="testViewEmptyCategorization">
+		<role>Patient</role>
+		<usecase>71</usecase>
+		<dateAdded>04/17/2015</dateAdded>
+		<description>
+			<precondition>Jennifer Jareau(MID685)is registered and authenticated with the iTrust system.</precondition>
+			<step>Jennifer Jareau logs into iTrust.</step>
+			<step>clicks View Food Diary</step>
+			<step>Enter "02/02/2000" as single date and click filter</step></description>
+		<expectedResults>
+			<eResult>No food diary exists in this date</eResult></expectedResults></test>
+	<test id="testSingularDate">
+		<role>Patient</role>
+		<usecase>71</usecase>
+		<dateAdded>04/17/2015</dateAdded>
+		<description>
+			<precondition>Jennifer Jareau(MID685)is registered and authenticated with the iTrust system.</precondition>
+			<step>Jennifer Jareau logs into iTrust.</step>
+			<step>clicks View Food Diary</step>
+			<step>Enter "09/30/2012" as single date and click filter</step>
+		</description>
+		<expectedResults>
+			<eResult>Food diary entries only at "09/30/2012" displayed</eResult></expectedResults></test>
+	<test id="testRangeDate">
+		<role>Patient</role>
+		<usecase>71</usecase>
+		<dateUpdated>04/17/2015</dateUpdated>
+		<description>
+			<precondition>Jennifer Jareau(MID685)is registered and authenticated with the iTrust system.</precondition>
+			<step>Jennifer Jareau logs into iTrust.</step>
+			<step>clicks View Food Diary</step>
+			<step>Enter "01/01/2005"as start date"02/02/2014" as end date and click filter</step></description>
+		<expectedResults>
+			<eResult>Food diary entries only at given range of date displayed</eResult></expectedResults></test>
+	<test id="testDateValidity">
+		<role>Patient</role>
+		<usecase>71</usecase>
+		<dateUpdated>04/17/2015</dateUpdated>
+		<description>
+			<precondition>Jennifer Jareau(MID685)is registered and authenticated with the iTrust system.</precondition>
+			<step>Jennifer Jareau logs into iTrust.</step>
+			<step>clicks View Food Diary</step>
+			<step>click filter</step></description>
+		<expectedResults>message "Date: [Incorrect Fomat must be (MM/DD/YYYY) and Non-Future Time]" displayed</expectedResults></test>
+
 </BlackBoxTestPlan>
